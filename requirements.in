@@ -1,0 +1,6 @@
+black==23.7.0
+flake8==6.0.0
+gtfs-realtime-bindings
+pandas==1.5.3
+pre-commit==3.3.3
+gtfs-realtime-bindings==1.0.0
