@@ -1,0 +1,13 @@
+black==23.7.0
+flake8==6.0.0
+pandas==1.5.3
+pre-commit==3.3.3
+pip-tools==7.3.0
+plotly==5.16.1
+dash==2.12.1
+dash-bootstrap-components==1.4.2
+dash-core-components==2.0.0
+dash-html-components==2.0.0
+google-cloud-core==2.3.3
+google-cloud-secret-manager==2.16.3
+google-cloud-storage==2.10.0
