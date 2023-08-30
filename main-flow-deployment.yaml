@@ -9,7 +9,10 @@ work_queue_name: default
 work_pool_name: default-agent-pool
 tags: []
 parameters: {}
-schedule: null
+schedule:
+  interval: 120.0
+  anchor_date: '2023-08-30T18:50:48.690000+00:00'
+  timezone: America/Chicago
 is_schedule_active: true
 infra_overrides: {}
 
@@ -76,5 +79,5 @@ parameter_openapi_schema:
   properties: {}
   required: null
   definitions: null
-timestamp: '2023-08-25T18:15:15.944427+00:00'
+timestamp: '2023-08-30T18:58:44.313844+00:00'
 triggers: []
