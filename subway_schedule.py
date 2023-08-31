@@ -20,7 +20,7 @@ def schedule_gtfs_feed(schedule_url: str) -> gk.feed:
 
     feed = gk.read_feed("gtfs_timetables.zip", dist_units="mi")
 
-    # os.remove("gtfs_timetables.zip")
+    os.remove("gtfs_timetables.zip")
 
     return feed
 

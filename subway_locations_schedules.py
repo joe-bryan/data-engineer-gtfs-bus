@@ -138,6 +138,8 @@ def subway_times(
 
     os.remove(trips_today_path)
     os.remove(live_locations_path)
+    os.rmdir("current_schedule")
+    os.rmdir("live_location")
 
     late_subways_3 = calculate_subway_lateness(wait_for=[compare], compare=compare)
     late_subways_3.to_csv("late_subways.csv", index=False)

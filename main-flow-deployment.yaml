@@ -9,10 +9,7 @@ work_queue_name: default
 work_pool_name: default-agent-pool
 tags: []
 parameters: {}
-schedule:
-  interval: 120.0
-  anchor_date: '2023-08-30T18:50:48.690000+00:00'
-  timezone: America/Chicago
+schedule: null
 is_schedule_active: true
 infra_overrides: {}
 
@@ -27,7 +24,7 @@ infrastructure:
   labels: {}
   name: null
   command: null
-  image: us-central1-docker.pkg.dev/gtfs-bus/subway-mbta-docker/subway-image
+  image: us-central1-docker.pkg.dev/gtfs-bus/subway-mbta-docker/subway-image:v1
   region: us-central1
   credentials:
     service_account_file: null
@@ -79,5 +76,5 @@ parameter_openapi_schema:
   properties: {}
   required: null
   definitions: null
-timestamp: '2023-08-30T18:58:44.313844+00:00'
+timestamp: '2023-08-31T14:21:37.994531+00:00'
 triggers: []
