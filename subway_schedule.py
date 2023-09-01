@@ -12,7 +12,7 @@ from prefect import flow, task
 
 
 @task
-def schedule_gtfs_feed():
+def schedule_feed():
     """Get newest schedule GTFS file from Massachusets Bay Transportation Authority"""
 
     schedule_url = "https://cdn.mbta.com/MBTA_GTFS.zip"
@@ -211,13 +211,13 @@ def schedule_gtfs_feed():
 
 
 @flow
-def get_gtfs_subway_schedule(
+def get_gtfs_subway_schedule():
+    schedule_feed()
+
     # schedule_url: str = "https://cdn.mbta.com/MBTA_GTFS.zip",
     # agency_name: str = "MBTA",
     # current_schedule_filename: str = "schedule_today",
     # prefect_gcs_block_name: str = "subway-gcs-bucket",
-) -> None:
-    schedule_gtfs_feed()
 
     # trips_stops = add_stops_stoptimes_schedule(
     #     wait_for=[full_schedule], feed=full_schedule, agency_name=agency_name
@@ -235,8 +235,6 @@ def get_gtfs_subway_schedule(
     #     from_path=f"{current_schedule_filename}.parquet.gzip",
     #     to_path=f"current_schedule/{current_schedule_filename}.parquet.gzip",
     # )
-
-    return None
 
 
 if __name__ == "__main__":
