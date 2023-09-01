@@ -20,7 +20,7 @@ def schedule_gtfs_feed(schedule_url: str) -> gk.feed:
 
     feed = gk.read_feed("gtfs_timetables.zip", dist_units="mi")
 
-    os.remove("gtfs_timetables.zip")
+    # os.remove("gtfs_timetables.zip")
 
     return feed
 
@@ -231,6 +231,8 @@ def get_gtfs_subway_schedule(
         from_path=f"{current_schedule_filename}.parquet.gzip",
         to_path=f"current_schedule/{current_schedule_filename}.parquet.gzip",
     )
+
+    os.remove("gtfs_timetables.zip")
 
     return None
 
