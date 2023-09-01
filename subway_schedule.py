@@ -11,7 +11,7 @@ from prefect import flow, task
 # from prefect_gcp.cloud_storage import GcsBucket
 
 
-@task()
+@task
 def schedule_gtfs_feed():
     """Get newest schedule GTFS file from Massachusets Bay Transportation Authority"""
 
@@ -29,7 +29,7 @@ def schedule_gtfs_feed():
     return feed
 
 
-# @task()
+# @task
 # def add_stops_stoptimes_schedule(feed: gk.feed, agency_name: str) -> pd.DataFrame:
 #     """Add stops and stop times to each trip for the selected agency"""
 
@@ -71,7 +71,7 @@ def schedule_gtfs_feed():
 #     return trips_routes_dates_stoptimes_stops
 
 
-# @task()
+# @task
 # def schedule_today(
 #     trips_routes_dates_stoptimes_stops: pd.DataFrame, current_trips_filename: str
 # ) -> pd.DataFrame:
@@ -196,7 +196,7 @@ def schedule_gtfs_feed():
 #     return trips_today
 
 
-# @task()
+# @task
 # def load_schedule_to_gcs(
 #     prefect_gcs_block_name: str, from_path: str, to_path: str
 # ) -> None:
@@ -210,7 +210,7 @@ def schedule_gtfs_feed():
 #     return None
 
 
-@flow()
+@flow
 def get_gtfs_subway_schedule(
     # schedule_url: str = "https://cdn.mbta.com/MBTA_GTFS.zip",
     # agency_name: str = "MBTA",
