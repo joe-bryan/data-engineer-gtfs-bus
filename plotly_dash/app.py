@@ -168,7 +168,7 @@ rows = html.Div(
                         html.H3(id="title", children="MBTA Subways App"),
                         html.H5(
                             id="subtitle",
-                            children="Discover if your subway is more than five minutes late",
+                            children="Discover if your subway is late",
                         ),
                     ],
                     style={"textAlign": "center", "marginTop": 40, "marginBottom": 40},

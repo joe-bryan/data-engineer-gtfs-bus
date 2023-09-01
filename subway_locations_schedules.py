@@ -91,7 +91,7 @@ def calculate_subway_lateness(compare: pd.DataFrame) -> pd.DataFrame:
 
     # Get subways later than 5 minutes and less than 30 minutes at specific stop and remove current_status == 1
     late_subways_2 = late_subways[
-        (late_subways["late_by"] > 5) & (late_subways["late_by"] < 30)
+        (late_subways["late_by"] > 0) & (late_subways["late_by"] < 30)
     ]
 
     # # late_subways_2 = compare[(compare["late_by"] > 5) & (compare["late_by"] < 30)]
