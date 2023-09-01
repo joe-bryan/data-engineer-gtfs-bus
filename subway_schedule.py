@@ -12,21 +12,28 @@ from prefect import flow, task
 
 
 @task()
-def schedule_gtfs_feed() -> gk.feed:
-    """Get newest schedule GTFS file from Massachusets Bay Transportation Authority"""
+def size():
+    print("Hello World!")
 
-    schedule_url: str = "https://cdn.mbta.com/MBTA_GTFS.zip"
+    return None
 
-    r = requests.get(schedule_url)
-    with open("gtfs_timetables.zip", "wb") as fd:
-        for chunk in r.iter_content(chunk_size=128):
-            fd.write(chunk)
 
-    feed = gk.read_feed("gtfs_timetables.zip", dist_units="mi")
+# @task()
+# def schedule_gtfs_feed() -> gk.feed:
+#     """Get newest schedule GTFS file from Massachusets Bay Transportation Authority"""
 
-    os.remove("gtfs_timetables.zip")
+#     schedule_url: str = "https://cdn.mbta.com/MBTA_GTFS.zip"
 
-    return feed
+#     r = requests.get(schedule_url)
+#     with open("gtfs_timetables.zip", "wb") as fd:
+#         for chunk in r.iter_content(chunk_size=128):
+#             fd.write(chunk)
+
+#     feed = gk.read_feed("gtfs_timetables.zip", dist_units="mi")
+
+#     os.remove("gtfs_timetables.zip")
+
+#     return feed
 
 
 # @task()
@@ -217,7 +224,8 @@ def get_gtfs_subway_schedule(
     # current_schedule_filename: str = "schedule_today",
     # prefect_gcs_block_name: str = "subway-gcs-bucket",
 ) -> None:
-    full_schedule = schedule_gtfs_feed()
+    size()
+    # full_schedule = schedule_gtfs_feed()
 
     # trips_stops = add_stops_stoptimes_schedule(
     #     wait_for=[full_schedule], feed=full_schedule, agency_name=agency_name
