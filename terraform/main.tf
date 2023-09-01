@@ -17,7 +17,7 @@ provider "google" {
 }
 
 # GCS storage bucket
-resource "google_storage_bucket" "gtfs-bus" {
+resource "google_storage_bucket" "subway-mbta" {
   name          = var.bucket_name
   location      = var.region
   force_destroy = true
@@ -33,7 +33,7 @@ resource "google_storage_bucket" "gtfs-bus" {
 }
 
 # Artifact registry for containers
-resource "google_artifact_registry_repository" "subway-mbta-registry" {
+resource "google_artifact_registry_repository" "subway-registry" {
   location      = var.region
   repository_id = var.registry_id
   format        = "DOCKER"

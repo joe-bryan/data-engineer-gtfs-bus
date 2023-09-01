@@ -19,7 +19,7 @@ def subways_from_gcs(late_subways_filename: str, prefect_gcs_block_name: str) ->
 
 @flow
 def write_subways_to_bigquery():
-    gcp_project_id = "gtfs-bus"
+    gcp_project_id = "subway-mbta"
     gcp_credentials = GcpCredentials.load("subway-mbta-gcs-credentials")
 
     prefect_gcs_block_name = "subway-gcs-bucket"

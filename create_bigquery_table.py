@@ -6,7 +6,7 @@ from prefect import flow
 
 @flow
 def create_biqquery_table():
-    gcp_project_id = "gtfs-bus"
+    gcp_project_id = "subway-mbta"
     gcp_credentials = GcpCredentials(project=gcp_project_id)
 
     schema = [
