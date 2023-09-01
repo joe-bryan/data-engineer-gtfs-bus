@@ -10,7 +10,7 @@ from prefect_gcp.cloud_storage import GcsBucket
 
 
 @task()
-def schedule_gtfs_feed(schedule_url: str) -> gk.feed:
+def schedule_gtfs_feed() -> gk.feed:
     """Get newest schedule GTFS file from Massachusets Bay Transportation Authority"""
 
     schedule_url: str = "https://cdn.mbta.com/MBTA_GTFS.zip"
