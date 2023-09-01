@@ -17,16 +17,16 @@ def schedule_feed():
 
     schedule_url = "https://cdn.mbta.com/MBTA_GTFS.zip"
 
-    r = requests.get(schedule_url)
-    with open("MBTA_GTFS.zip", "wb") as fd:
-        for chunk in r.iter_content(chunk_size=128):
-            fd.write(chunk)
+    # r = requests.get(schedule_url)
+    # with open("MBTA_GTFS.zip", "wb") as fd:
+    #     for chunk in r.iter_content(chunk_size=128):
+    #         fd.write(chunk)
 
-    feed = gk.read_feed("MBTA_GTFS.zip", dist_units="mi")
+    # feed = gk.read_feed("MBTA_GTFS.zip", dist_units="mi")
 
-    os.remove("MBTA_GTFS.zip")
+    # os.remove("MBTA_GTFS.zip")
 
-    return feed
+    return None
 
 
 # @task
