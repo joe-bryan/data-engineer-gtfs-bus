@@ -12,7 +12,7 @@ from dash import html, dcc, Input, Output, Dash, callback
 import dash_bootstrap_components as dbc
 
 # GCP project in which to store secrets in Secret Manager.
-project_id = "gtfs-bus"
+project_id = "subway-mbta"
 
 # Build the parent name from the project.
 parent = f"projects/{project_id}"
@@ -51,7 +51,7 @@ def read_csvfile(bucket_name: str, file_path: str):
 def access_dataframe_from_gcsbucket():
     """Reads the GCS bucket csv file and converts to a Pandas DataFrame"""
 
-    bucket_name = "subway-mbta-location-data"
+    bucket_name = "subway-mbta-location"
     file_path = "late_subways.csv"
 
     data = read_csvfile(bucket_name, file_path)
@@ -152,7 +152,6 @@ def indicator():
             mode="number",
             value=len(subway_dataframe.axes[0]),
             number={"font": {"size": 60}},
-            # title = {"text": "<br><span style='font-size:0.7em;color:black'>Number of Late Subways</span>"},
             domain={"row": 0, "column": 0},
         )
     )
@@ -272,9 +271,10 @@ def plot_late_subway_location(selected_route):
 
     return fig
 
+
 """ start the web application
     the host IP 0.0.0.0 is needed for dockerized version of this dash application
 """
-if __name__ == '__main__':
-    app.run_server(debug=False, host='0.0.0.0', port=8050)
+if __name__ == "__main__":
+    app.run_server(debug=False, host="0.0.0.0", port=8050)
     server = app.server
