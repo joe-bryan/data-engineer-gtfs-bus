@@ -22,7 +22,7 @@ def schedule_feed():
         for chunk in r.iter_content(chunk_size=128):
             fd.write(chunk)
 
-    # feed = gk.read_feed("MBTA_GTFS.zip", dist_units="mi")
+    feed = gk.read_feed("MBTA_GTFS.zip", dist_units="mi")
 
     # os.remove("MBTA_GTFS.zip")
 
