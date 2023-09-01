@@ -1,5 +1,6 @@
-from subway_locations import flow_live_locations_subway
+# from subway_locations import flow_live_locations_subway
 from subway_schedule import get_gtfs_subway_schedule
+
 # from subway_locations_schedules import subway_times
 # from write_bigquery_table import write_subways_to_bigquery
 from prefect import flow
@@ -9,8 +10,8 @@ from prefect import flow
 def main_flow():
     """Flow that encompasses four other Prefect flows"""
 
-    # Get the live subway data
-    live_location_subways = flow_live_locations_subway()
+    # # Get the live subway data
+    # live_location_subways = flow_live_locations_subway()
 
     # Get the schedules for today
     schedules_today = get_gtfs_subway_schedule()
