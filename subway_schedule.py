@@ -15,16 +15,16 @@ from prefect import flow, task
 def schedule_gtfs_feed():
     """Get newest schedule GTFS file from Massachusets Bay Transportation Authority"""
 
-    schedule_url: str = "https://cdn.mbta.com/MBTA_GTFS.zip"
+    schedule_url = "https://cdn.mbta.com/MBTA_GTFS.zip"
 
     r = requests.get(schedule_url)
-    with open("gtfs_timetables.zip", "wb") as fd:
+    with open("MBTA_GTFS.zip", "wb") as fd:
         for chunk in r.iter_content(chunk_size=128):
             fd.write(chunk)
 
-    feed = gk.read_feed("gtfs_timetables.zip", dist_units="mi")
+    feed = gk.read_feed("MBTA_GTFS.zip", dist_units="mi")
 
-    os.remove("gtfs_timetables.zip")
+    os.remove("MBTA_GTFS.zip")
 
     return feed
 
