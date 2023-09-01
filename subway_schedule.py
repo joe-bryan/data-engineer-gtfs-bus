@@ -13,6 +13,8 @@ from prefect_gcp.cloud_storage import GcsBucket
 def schedule_gtfs_feed(schedule_url: str) -> gk.feed:
     """Get newest schedule GTFS file from Massachusets Bay Transportation Authority"""
 
+    schedule_url: str = "https://cdn.mbta.com/MBTA_GTFS.zip"
+
     r = requests.get(schedule_url)
     with open("gtfs_timetables.zip", "wb") as fd:
         for chunk in r.iter_content(chunk_size=128):
@@ -208,12 +210,12 @@ def schedule_gtfs_feed(schedule_url: str) -> gk.feed:
 
 @flow()
 def get_gtfs_subway_schedule(
-    schedule_url: str = "https://cdn.mbta.com/MBTA_GTFS.zip",
+    # schedule_url: str = "https://cdn.mbta.com/MBTA_GTFS.zip",
     # agency_name: str = "MBTA",
     # current_schedule_filename: str = "schedule_today",
     # prefect_gcs_block_name: str = "subway-gcs-bucket",
 ) -> None:
-    full_schedule = schedule_gtfs_feed(schedule_url)
+    full_schedule = schedule_gtfs_feed()
 
     # trips_stops = add_stops_stoptimes_schedule(
     #     wait_for=[full_schedule], feed=full_schedule, agency_name=agency_name
