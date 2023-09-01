@@ -12,13 +12,13 @@ from dash import html, dcc, Input, Output, Dash, callback
 import dash_bootstrap_components as dbc
 
 # GCP project in which to store secrets in Secret Manager.
-project_id = "subway-mbta"
+project_id = "1046417978179"
 
 # Build the parent name from the project.
 parent = f"projects/{project_id}"
 
 # ID of the secret to create.
-secret_id_2 = "MAPBOX_ACCESS_TOKEN"
+secret_id = "MAPBOX_ACCESS"
 
 # Create the Secret Manager client.
 client_1 = secretmanager.SecretManagerServiceClient()
@@ -27,7 +27,7 @@ client_1 = secretmanager.SecretManagerServiceClient()
 parent = f"projects/{project_id}"
 
 # Build the complete resource name of the secret version.
-secret_resource_name = f"{parent}/secrets/{secret_id_2}/versions/1"
+secret_resource_name = f"{parent}/secrets/{secret_id}/versions/1"
 
 # Access the secret version.
 response = client_1.access_secret_version(name=secret_resource_name)
