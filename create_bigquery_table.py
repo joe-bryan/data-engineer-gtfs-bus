@@ -6,8 +6,7 @@ from prefect import flow
 
 @flow
 def create_biqquery_table():
-    gcp_project_id = "subway-mbta"
-    gcp_credentials = GcpCredentials(project=gcp_project_id)
+    gcp_credentials = GcpCredentials.load("subway-credentials")
 
     schema = [
         SchemaField("route_id", field_type="STRING", mode="REQUIRED"),
@@ -84,7 +83,7 @@ def create_biqquery_table():
     ]
 
     bigquery_create_table(
-        dataset="subway-mbta",
+        dataset="subway_mbta",
         table="raw_subway",
         schema=schema,
         gcp_credentials=gcp_credentials,
