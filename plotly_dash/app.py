@@ -193,6 +193,11 @@ rows = html.Div(
                                             figure=indicator(),
                                             style={"height": 100},
                                         ),
+                                        dcc.Interval(
+                                            id="interval-component",
+                                            interval=1 * 1000,
+                                            n_intervals=0,
+                                        ),
                                     ]
                                 )
                             ),
@@ -235,8 +240,9 @@ app.layout = dbc.Container(rows, fluid=True)
 @callback(
     Output(component_id="mapbox", component_property="figure"),
     Input(component_id="type-check-list", component_property="value"),
+    Input(component_id="interval-component", component_property="n_intervals"),
 )
-def plot_late_subway_location(selected_route):
+def plot_late_subway_location(selected_route, n):
     """Create plotly map and have data points change when checklist changes"""
     plotly_subway_dataframe = subway_dataframe[
         subway_dataframe["route_id"].isin(selected_route)
