@@ -193,11 +193,6 @@ rows = html.Div(
                                             figure=indicator(),
                                             style={"height": 100},
                                         ),
-                                        dcc.Interval(
-                                            id="interval-component",
-                                            interval=1 * 1000,
-                                            n_intervals=0,
-                                        ),
                                     ]
                                 )
                             ),
@@ -227,7 +222,18 @@ rows = html.Div(
                     width=3,
                 ),
                 dbc.Col(
-                    html.Div(id="div-body", children=[dcc.Graph(id="mapbox")]), width=9
+                    html.Div(
+                        id="div-body",
+                        children=[
+                            dcc.Graph(id="mapbox"),
+                            dcc.Interval(
+                                id="interval-component",
+                                interval=1 * 120000,
+                                n_intervals=0,
+                            ),
+                        ],
+                    ),
+                    width=9,
                 ),
             ]
         ),
