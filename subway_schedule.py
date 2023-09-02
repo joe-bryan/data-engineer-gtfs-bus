@@ -21,7 +21,7 @@ def schedule_feed(schedule_url: str):
 
 
 @flow
-def get_gtfs_subway_schedule(
+def subway_schedule(
     schedule_url: str = "https://cdn.mbta.com/MBTA_GTFS.zip",
 ) -> None:
     schedule_feed(schedule_url=schedule_url)
@@ -30,4 +30,4 @@ def get_gtfs_subway_schedule(
 
 
 if __name__ == "__main__":
-    get_gtfs_subway_schedule()
+    subway_schedule()
