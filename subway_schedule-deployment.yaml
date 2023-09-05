@@ -1,22 +1,22 @@
 ###
-### A complete description of a Prefect Deployment for flow 'subway-schedule'
+### A complete description of a Prefect Deployment for flow 'get-gtfs-subway-schedule'
 ###
 name: schedule
 description: null
-version: daded3c8444539b0af3874fb255b5e96
+version: 08cd992e75194bcbefd1b910d4503135
 # The work queue that will handle this deployment's runs
 work_queue_name: default
-work_pool_name: default-agent-pool
+work_pool_name: null
 tags: []
 parameters: {}
 schedule: null
-is_schedule_active: true
+is_schedule_active: null
 infra_overrides: {}
 
 ###
 ### DO NOT EDIT BELOW THIS LINE
 ###
-flow_name: subway-schedule
+flow_name: get-gtfs-subway-schedule
 manifest_path: null
 infrastructure:
   type: cloud-run-job
@@ -69,7 +69,7 @@ storage:
   block_type_slug: github
   _block_type_slug: github
 path: ''
-entrypoint: subway_schedule.py:subway_schedule
+entrypoint: subway_schedule.py:get_gtfs_subway_schedule
 parameter_openapi_schema:
   title: Parameters
   type: object
@@ -79,7 +79,22 @@ parameter_openapi_schema:
       default: https://cdn.mbta.com/MBTA_GTFS.zip
       position: 0
       type: string
+    agency_name:
+      title: agency_name
+      default: MBTA
+      position: 1
+      type: string
+    current_schedule_filename:
+      title: current_schedule_filename
+      default: schedule_today
+      position: 2
+      type: string
+    prefect_gcs_block_name:
+      title: prefect_gcs_block_name
+      default: subway-gcs-bucket
+      position: 3
+      type: string
   required: null
   definitions: null
-timestamp: '2023-09-02T14:02:48.706194+00:00'
+timestamp: '2023-09-05T14:55:21.196932+00:00'
 triggers: []
