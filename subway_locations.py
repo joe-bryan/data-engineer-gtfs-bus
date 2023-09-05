@@ -79,6 +79,20 @@ def et_live_locations_subway(filename: str) -> None:
     # Convert start & end dates to datetime
     df_3["live_start_date"] = pd.to_datetime(df_3["live_start_date"], format="%Y-%m-%d")
 
+    # These are route id's for subway lines
+    subway_only = [
+        "Blue",
+        "Green-B",
+        "Green-C",
+        "Green-D",
+        "Green-E",
+        "Mattapan",
+        "Orange",
+        "Red",
+    ]
+
+    df_3 = df_3[df_3["live_route_id"].isin(subway_only)]
+
     # Convert the DataFrame to parquet file type that is compressed
     df_3.to_parquet(f"{filename}.parquet.gzip", engine="pyarrow", compression="gzip")
 

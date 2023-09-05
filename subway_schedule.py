@@ -13,7 +13,11 @@ from prefect_gcp.cloud_storage import GcsBucket
 def schedule_feed(schedule_url: str):
     """Get newest schedule GTFS file from Massachusets Bay Transportation Authority"""
 
-    requests.get(schedule_url)
+    r = requests.get(schedule_url)
+
+    with open("MBTA_GTFS.zip", "wb") as fd:
+        for chunk in r.iter_content(chunk_size=128):
+            fd.write(chunk)
 
     with ZipFile("MBTA_GTFS.zip") as myzip:
         agency = pd.read_csv(myzip.open("agency.txt"))
@@ -22,6 +26,8 @@ def schedule_feed(schedule_url: str):
         calendar = pd.read_csv(myzip.open("calendar.txt"))
         stop_times = pd.read_csv(myzip.open("stop_times.txt"))
         stops = pd.read_csv(myzip.open("stops.txt"))
+
+    os.remove("MBTA_GTFS.zip")
 
     return agency, routes, trip, calendar, stop_times, stops
 
@@ -96,23 +102,6 @@ def schedule_today(
         pd.to_datetime, format="%Y%m%d"
     )
 
-    # These are route id's for subway lines
-    subway_only = [
-        "Blue",
-        "Green-B",
-        "Green-C",
-        "Green-D",
-        "Green-E",
-        "Mattapan",
-        "Orange",
-        "Red",
-    ]
-
-    # Only use these subway routes in the dataset
-    trips_routes_dates_stoptimes_stops_1 = trips_routes_dates_stoptimes_stops[
-        trips_routes_dates_stoptimes_stops["route_id"].isin(subway_only)
-    ]
-
     # Use these columns only
     columns_only = [
         "route_id",
@@ -172,19 +161,14 @@ def schedule_today(
     ]
 
     # Only use these columns in the dataset
-    trips_routes_dates_stoptimes_stops_2 = trips_routes_dates_stoptimes_stops_1[
+    trips_routes_dates_stoptimes_stops_1 = trips_routes_dates_stoptimes_stops[
         columns_only
     ]
 
     # Only use data if current day is in the service interval
-    trips_routes_dates_stoptimes_stops_3 = trips_routes_dates_stoptimes_stops_2[
-        (todays_date_1 >= trips_routes_dates_stoptimes_stops_2["start_date"])
-        & (todays_date_1 <= trips_routes_dates_stoptimes_stops_2["end_date"])
-    ]
-
-    # Check if trip is valid on the same day of week
-    trips_today = trips_routes_dates_stoptimes_stops_3[
-        trips_routes_dates_stoptimes_stops_3[current_day] == 1
+    trips_today = trips_routes_dates_stoptimes_stops_1[
+        (todays_date_1 >= trips_routes_dates_stoptimes_stops_1["start_date"])
+        & (todays_date_1 <= trips_routes_dates_stoptimes_stops_1["end_date"])
     ]
 
     # Apply string type to stop_id in order to successfully
@@ -218,10 +202,17 @@ def get_gtfs_subway_schedule(
     current_schedule_filename: str = "schedule_today",
     prefect_gcs_block_name: str = "subway-gcs-bucket",
 ) -> None:
-    full_schedule = schedule_feed(schedule_url=schedule_url)
+    agency, routes, trip, calendar, stop_times, stops = schedule_feed(schedule_url)
 
     trips_stops = add_stops_stoptimes_schedule(
-        wait_for=[full_schedule], feed=full_schedule, agency_name=agency_name
+        wait_for=[agency, routes, trip, calendar, stop_times, stops],
+        agency=agency,
+        routes=routes,
+        trip=trip,
+        calendar=calendar,
+        stop_times=stop_times,
+        stops=stops,
+        agency_name=agency_name,
     )
 
     trips_today = schedule_today(

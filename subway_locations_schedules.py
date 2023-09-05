@@ -52,8 +52,8 @@ def combine_live_trips_with_schedule(
 
     compare = trips_today.merge(
         live_locations,
-        left_on=["trip_id", "stop_id", "direction_id"],
-        right_on=["trip_id", "stop_id", "direction_id"],
+        left_on=["trip_id", "stop_id", "direction_id", "route_id"],
+        right_on=["trip_id", "stop_id", "direction_id", "live_route_id"],
     )
 
     return compare
@@ -93,8 +93,6 @@ def calculate_subway_lateness(compare: pd.DataFrame) -> pd.DataFrame:
     late_subways_2 = late_subways[
         (late_subways["late_by"] > 0) & (late_subways["late_by"] < 30)
     ]
-
-    # # late_subways_2 = compare[(compare["late_by"] > 5) & (compare["late_by"] < 30)]
 
     # Only include trains that are not headed to the first stop
     late_subways_3 = late_subways_2[late_subways_2["stop_sequence"] != 1]
