@@ -16,7 +16,7 @@ now = datetime.now(tz)
 dt = now.replace(hour=0, minute=0, second=0, microsecond=0)
 
 
-@task(log_prints=True, retries=3)
+@task(log_prints=True)
 def schedule_from_gcs(
     current_schedule_filename: str, prefect_gcs_block_name: str
 ) -> Path:
@@ -30,7 +30,7 @@ def schedule_from_gcs(
     return Path(gcs_path)
 
 
-@task(log_prints=True, retries=3)
+@task(log_prints=True)
 def subway_live_locations_from_gcs(
     live_locations_filename: str, prefect_gcs_block_name: str
 ) -> Path:
@@ -139,11 +139,11 @@ def subway_times(
     os.rmdir("current_schedule")
     os.rmdir("live_location")
 
-    late_subways_3 = calculate_subway_lateness(wait_for=[compare], compare=compare)
-    late_subways_3.to_csv("late_subways.csv", index=False)
+    late_subways = calculate_subway_lateness(wait_for=[compare], compare=compare)
+    late_subways.to_csv("late_subways.csv", index=False)
 
     load_late_subways_to_gcs(
-        wait_for=[late_subways_3],
+        wait_for=[late_subways],
         late_subways_path="late_subways.csv",
         prefect_gcs_block_name=prefect_gcs_block_name,
     )
