@@ -6,7 +6,7 @@ description: null
 version: c85b1cb996a43015bb74811c200d654f
 # The work queue that will handle this deployment's runs
 work_queue_name: default
-work_pool_name: default-agent-pool
+work_pool_name: subway
 tags: []
 parameters: {}
 schedule: null
@@ -81,5 +81,5 @@ parameter_openapi_schema:
       type: string
   required: null
   definitions: null
-timestamp: '2023-09-09T17:02:21.715598+00:00'
+timestamp: '2023-09-09T17:19:29.550496+00:00'
 triggers: []

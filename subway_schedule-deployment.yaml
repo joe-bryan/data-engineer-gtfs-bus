@@ -3,14 +3,17 @@
 ###
 name: schedule
 description: null
-version: 08cd992e75194bcbefd1b910d4503135
+version: 03d821b2b1fef36ea38d8e67d9b1204f
 # The work queue that will handle this deployment's runs
 work_queue_name: default
-work_pool_name: null
+work_pool_name: default-agent-pool
 tags: []
 parameters: {}
-schedule: null
-is_schedule_active: null
+schedule:
+  cron: 15 5 * * *
+  timezone: America/New_York
+  day_or: true
+is_schedule_active: true
 infra_overrides: {}
 
 ###
@@ -24,7 +27,7 @@ infrastructure:
   labels: {}
   name: null
   command: null
-  image: us-central1-docker.pkg.dev/subway-mbta/subway-docker/subway-image:v1
+  image: us-central1-docker.pkg.dev/subway-mbta/subway-docker/subway-image:v2
   region: us-central1
   credentials:
     service_account_file: null
@@ -53,8 +56,8 @@ infrastructure:
   args: null
   keep_job: false
   timeout: 600
-  _block_document_id: aa42f41d-3698-4c58-a082-9a3df0db55e2
-  _block_document_name: subway-cloud-run
+  _block_document_id: 2964a0ae-bdc5-481f-93f6-f5b0f5be6a45
+  _block_document_name: schedule-block
   _is_anonymous: false
   block_type_slug: cloud-run-job
   _block_type_slug: cloud-run-job
@@ -96,5 +99,5 @@ parameter_openapi_schema:
       type: string
   required: null
   definitions: null
-timestamp: '2023-09-05T14:55:21.196932+00:00'
+timestamp: '2023-09-09T16:23:11.436636+00:00'
 triggers: []
