@@ -18,13 +18,13 @@ def schedule_feed(schedule_url: str):
         agency = pd.read_csv(myzip.open("agency.txt"), low_memory=False)
         routes = pd.read_csv(myzip.open("routes.txt"), low_memory=False)
         trip = pd.read_csv(myzip.open("trips.txt"), low_memory=False)
-        # calendar = pd.read_csv(myzip.open("calendar.txt"), low_memory=False)
+        calendar = pd.read_csv(myzip.open("calendar.txt"), low_memory=False)
         # stop_times = pd.read_csv(myzip.open("stop_times.txt"), low_memory=False)
         # stops = pd.read_csv(myzip.open("stops.txt"), low_memory=False)
 
     # os.remove("MBTA_GTFS.zip")
 
-    return agency, routes, trip  # , calendar, stop_times, stops
+    return agency, routes, trip, calendar  # , stop_times, stops
 
 
 # @task
