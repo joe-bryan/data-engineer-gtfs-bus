@@ -19,10 +19,10 @@ def schedule_feed(schedule_url: str):
         routes = pd.read_csv(myzip.open("routes.txt"), low_memory=False)
         trip = pd.read_csv(myzip.open("trips.txt"), low_memory=False)
         calendar = pd.read_csv(myzip.open("calendar.txt"), low_memory=False)
-        chunk_stop_times = pd.read_csv(
+        stop_times = pd.read_csv(
             myzip.open("stop_times.txt"),
             dtype={"trip_id": str, "stop_id": str, "stop_headsign": str},
-            chunksize=20000,
+            engine="pyarrow",
         )
         stop_times = pd.concat(chunk_stop_times)
         stops = pd.read_csv(myzip.open("stops.txt"), low_memory=False)
