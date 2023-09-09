@@ -34,7 +34,7 @@ def stop_times(schedule_url):
 
     urllib.request.urlretrieve(schedule_url, filename)
 
-    with ZipFile(schedule_url) as zip:
+    with ZipFile(filename) as zip:
         chunk_stop_times = pd.read_csv(
             zip.open("stop_times.txt"),
             dtype={
