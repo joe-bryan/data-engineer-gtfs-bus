@@ -4,6 +4,8 @@ import os
 import pandas as pd
 from prefect import flow, task
 import urllib.request
+import pyarrow.csv as pv
+import pyarrow.parquet as pq
 
 
 @task(persist_result=True)
@@ -19,17 +21,18 @@ def schedule_feed(schedule_url: str):
         routes = pd.read_csv(myzip.open("routes.txt"), low_memory=False)
         trip = pd.read_csv(myzip.open("trips.txt"), low_memory=False)
         calendar = pd.read_csv(myzip.open("calendar.txt"), low_memory=False)
-        stop_times = pd.read_csv(
-            myzip.open("stop_times.txt"),
-            dtype={"trip_id": str, "stop_id": str, "stop_headsign": str},
-            engine="pyarrow",
-            usecols=[
+        convert_options = pv.ConvertOptions(
+            column_types={"trip_id": str, "stop_id": str, "stop_headsign": str},
+            include_columns=[
                 "trip_id",
                 "arrival_time",
                 "departure_time",
                 "stop_id",
                 "stop_sequence",
             ],
+        )
+        stop_times = pv.read_csv(
+            myzip.open("stop_times.txt"), convert_options=convert_options
         )
         stops = pd.read_csv(myzip.open("stops.txt"), low_memory=False)
 
