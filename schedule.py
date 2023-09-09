@@ -21,14 +21,21 @@ def schedule_feed(schedule_url: str):
         routes = pd.read_csv(myzip.open("routes.txt"), low_memory=False)
         trip = pd.read_csv(myzip.open("trips.txt"), low_memory=False)
         calendar = pd.read_csv(myzip.open("calendar.txt"), low_memory=False)
-        stop_times = pv.read_csv(myzip.open("stop_times.txt"))
-        pq.write_table(stop_times, "stop_times.parquet")
-        stop_times = pd.read_parquet("stop_times.parquet")
         stops = pd.read_csv(myzip.open("stops.txt"), low_memory=False)
 
     # os.remove("MBTA_GTFS.zip")
 
-    return agency, routes, trip, calendar, stop_times, stops
+    return agency, routes, trip, calendar, stops
+
+
+@task
+def stop_times(zip_file: str):
+    with ZipFile(zip_file) as myzip:
+        stop_times = pv.read_csv(myzip.open("stop_times.txt"))
+        pq.write_table(stop_times, "stop_times.parquet")
+        stop_times = pd.read_parquet("stop_times.parquet")
+
+    return stop_times
 
 
 # @task
