@@ -61,6 +61,8 @@ def schedules(
 ):
     schedule_feed(schedule_url)
 
+    stop_times("MBTA_GTFS.zip")
+
     os.remove("MBTA_GTFS.zip")
 
     # load_schedules_to_gcs(
