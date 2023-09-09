@@ -23,8 +23,14 @@ def schedule_feed(schedule_url: str):
             myzip.open("stop_times.txt"),
             dtype={"trip_id": str, "stop_id": str, "stop_headsign": str},
             engine="pyarrow",
+            usecols=[
+                "trip_id",
+                "arrival_time",
+                "departure_time",
+                "stop_id",
+                "stop_sequence",
+            ],
         )
-        stop_times = pd.concat(chunk_stop_times)
         stops = pd.read_csv(myzip.open("stops.txt"), low_memory=False)
 
     # os.remove("MBTA_GTFS.zip")
