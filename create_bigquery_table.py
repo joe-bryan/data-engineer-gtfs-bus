@@ -84,7 +84,7 @@ def create_biqquery_table():
 
     bigquery_create_table(
         dataset="subway_mbta",
-        table="raw_subway",
+        table="raw_subway_mbta",
         schema=schema,
         gcp_credentials=gcp_credentials,
     )

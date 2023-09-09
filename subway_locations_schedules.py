@@ -89,7 +89,7 @@ def calculate_subway_lateness(compare: pd.DataFrame) -> pd.DataFrame:
     # Remove timestamps that are not within the last 90 mins
     late_subways = compare[(now - compare["timestamp"]) / pd.Timedelta(minutes=1) <= 90]
 
-    # Get subways later than 5 minutes and less than 30 minutes at specific stop and remove current_status == 1
+    # Get subways later than _ minutes and less than 30 minutes at specific stop and remove current_status == 1
     late_subways_2 = late_subways[
         (late_subways["late_by"] > 0) & (late_subways["late_by"] < 30)
     ]

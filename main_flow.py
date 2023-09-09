@@ -9,13 +9,13 @@ def main_flow():
     """Flow that encompasses four other Prefect flows"""
 
     # Get the live subway data
-    live_location_subways = flow_live_locations_subway()
+    live = flow_live_locations_subway()
 
     # Compare live subways with schedules
-    subway_times(wait_for=[live_location_subways])
+    late = subway_times(wait_for=live)
 
     # Write any late subways to bigquery table
-    write_subways_to_bigquery(wait_for=[subway_times])
+    write_subways_to_bigquery(wait_for=late)
 
 
 if __name__ == "__main__":

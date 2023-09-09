@@ -9,7 +9,7 @@ from prefect import flow, task
 from prefect_gcp.cloud_storage import GcsBucket
 
 
-@task
+@task(persist_result=True)
 def schedule_feed(schedule_url: str):
     """Get newest schedule GTFS file from Massachusets Bay Transportation Authority"""
 
@@ -86,8 +86,8 @@ def schedule_today(
     # Get the datetime of today
     todays_date = datetime.now(tz)
 
-    # Get only the day of week of today in lowercase
-    current_day = todays_date.strftime("%A").lower()
+    # # Get only the day of week of today in lowercase
+    # current_day = todays_date.strftime("%A").lower()
 
     # Get the date in 'YearMonthDay' format
     todays_date_string = todays_date.strftime("%Y%m%d")

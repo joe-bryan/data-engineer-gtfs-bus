@@ -4,6 +4,7 @@ from prefect_gcp.bigquery import bigquery_load_file
 from google.cloud.bigquery import SchemaField
 from pathlib import Path
 from prefect_gcp.cloud_storage import GcsBucket
+import os
 
 
 @task(retries=3)
@@ -106,12 +107,15 @@ def write_subways_to_bigquery():
 
     result = bigquery_load_file(
         dataset="subway_mbta",
-        table="raw_subway",
+        table="raw_subway_mbta",
         path=late_subways_path,
         schema=schema,
         gcp_credentials=gcp_credentials,
         project=gcp_project_id,
     )
+
+    os.remove("late_subways.csv")
+
     return result
 
 
