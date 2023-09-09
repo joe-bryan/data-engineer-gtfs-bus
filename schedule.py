@@ -4,8 +4,7 @@ import os
 import pandas as pd
 from prefect import flow, task
 import urllib.request
-import pyarrow.csv as pv
-import pyarrow.parquet as pq
+import polars as pl
 
 
 @task(persist_result=True)
@@ -34,25 +33,23 @@ def stop_times(schedule_url):
 
     urllib.request.urlretrieve(schedule_url, filename)
 
-    with ZipFile(filename) as zip:
-        chunk_stop_times = pd.read_csv(
-            zip.open("stop_times.txt"),
-            dtype={
-                "trip_id": str,
-                "stop_id": str,
-                "stop_headsign": str,
-                "stop_sequence": str,
-                "pickup_type": str,
-                "drop_off_type": str,
-                "timepoint": str,
-                "continuous_pickup": str,
-                "continuous_drop_off": str,
-            },
-            chunksize=400000,
+    with ZipFile(filename) as myzip:
+        pl.read_csv(
+            myzip.open("stop_times.txt"),
+            dtypes={"trip_id": str, "stop_id": str, "stop_headsign": str},
+        ).write_parquet(
+            "stop_times.parquet.gzip", compression="gzip", row_group_size=100000
         )
-        stop_times = pd.concat(chunk_stop_times)
-        # stop_times.to_parquet("stop_times.parquet.gzip", compression="gzip")
-        # stop_times = pd.read_parquet("stop_times.parquet.gzip")
+        stop_times = pd.read_parquet(
+            "stop_times.parquet.gzip",
+            columns=[
+                "trip_id",
+                "arrival_time",
+                "departure_time",
+                "stop_id",
+                "stop_sequence",
+            ],
+        )
 
     return stop_times
 
@@ -83,6 +80,8 @@ def schedules(
     stop_times(schedule_url)
 
     os.remove("MBTA_GTFS.zip")
+
+    os.remove("stop_times.parquet.gzip")
 
     # load_schedules_to_gcs(
     #     wait_for=[trips_today],
