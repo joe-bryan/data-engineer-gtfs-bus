@@ -29,10 +29,12 @@ def schedule_feed(schedule_url: str):
 
 
 @task(persist_result=True)
-def stop_times():
+def stop_times(schedule_url):
     filename = "MBTA_GTFS.zip"
 
-    with ZipFile(filename) as zip:
+    urllib.request.urlretrieve(schedule_url, filename)
+
+    with ZipFile(schedule_url) as zip:
         chunk_stop_times = pd.read_csv(
             zip.open("stop_times.txt"),
             dtype={
@@ -78,7 +80,7 @@ def schedules(
 ):
     schedule_feed(schedule_url)
 
-    # stop_times()
+    stop_times(schedule_url)
 
     os.remove("MBTA_GTFS.zip")
 
