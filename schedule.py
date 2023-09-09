@@ -15,17 +15,17 @@ def schedule_feed(schedule_url: str):
         for chunk in r.iter_content(chunk_size=128):
             fd.write(chunk)
 
-    with ZipFile("MBTA_GTFS.zip") as myzip:
-        agency = pd.read_csv(myzip.open("agency.txt"), low_memory=False)
-        routes = pd.read_csv(myzip.open("routes.txt"), low_memory=False)
-        trip = pd.read_csv(myzip.open("trips.txt"), low_memory=False)
-        calendar = pd.read_csv(myzip.open("calendar.txt"), low_memory=False)
-        stop_times = pd.read_csv(myzip.open("stop_times.txt"), low_memory=False)
-        stops = pd.read_csv(myzip.open("stops.txt"), low_memory=False)
+    # with ZipFile("MBTA_GTFS.zip") as myzip:
+    #     agency = pd.read_csv(myzip.open("agency.txt"), low_memory=False)
+    #     routes = pd.read_csv(myzip.open("routes.txt"), low_memory=False)
+    #     trip = pd.read_csv(myzip.open("trips.txt"), low_memory=False)
+    #     calendar = pd.read_csv(myzip.open("calendar.txt"), low_memory=False)
+    #     stop_times = pd.read_csv(myzip.open("stop_times.txt"), low_memory=False)
+    #     stops = pd.read_csv(myzip.open("stops.txt"), low_memory=False)
 
     # os.remove("MBTA_GTFS.zip")
 
-    return agency, routes, trip, calendar, stop_times, stops
+    return None  # agency, routes, trip, calendar, stop_times, stops
 
 
 # @task
