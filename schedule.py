@@ -28,31 +28,31 @@ def schedule_feed(schedule_url: str):
     return agency, routes, trip, calendar, stops
 
 
-@task(persist_result=True)
-def stop_times():
-    filename = "MBTA_GTFS.zip"
+# @task(persist_result=True)
+# def stop_times():
+#     filename = "MBTA_GTFS.zip"
 
-    with ZipFile(filename) as zip:
-        chunk_stop_times = pd.read_csv(
-            zip.open("stop_times.txt"),
-            dtype={
-                "trip_id": str,
-                "stop_id": str,
-                "stop_headsign": str,
-                "stop_sequence": str,
-                "pickup_type": str,
-                "drop_off_type": str,
-                "timepoint": str,
-                "continuous_pickup": str,
-                "continuous_drop_off": str,
-            },
-            chunksize=400000,
-        )
-        stop_times = pd.concat(chunk_stop_times)
-        stop_times.to_parquet("stop_times.parquet.gzip", compression="gzip")
-        stop_times = pd.read_parquet("stop_times.parquet.gzip")
+#     with ZipFile(filename) as zip:
+#         chunk_stop_times = pd.read_csv(
+#             zip.open("stop_times.txt"),
+#             dtype={
+#                 "trip_id": str,
+#                 "stop_id": str,
+#                 "stop_headsign": str,
+#                 "stop_sequence": str,
+#                 "pickup_type": str,
+#                 "drop_off_type": str,
+#                 "timepoint": str,
+#                 "continuous_pickup": str,
+#                 "continuous_drop_off": str,
+#             },
+#             chunksize=400000,
+#         )
+#         stop_times = pd.concat(chunk_stop_times)
+#         stop_times.to_parquet("stop_times.parquet.gzip", compression="gzip")
+#         stop_times = pd.read_parquet("stop_times.parquet.gzip")
 
-    return stop_times
+#     return stop_times
 
 
 # @task
@@ -78,7 +78,7 @@ def schedules(
 ):
     schedule_feed(schedule_url)
 
-    stop_times()
+    # stop_times()
 
     os.remove("MBTA_GTFS.zip")
 
