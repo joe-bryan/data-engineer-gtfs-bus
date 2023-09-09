@@ -23,7 +23,7 @@ def schedule_feed(schedule_url: str):
         stop_times = pd.read_csv(myzip.open("stop_times.txt"))
         stops = pd.read_csv(myzip.open("stops.txt"))
 
-    os.remove("MBTA_GTFS.zip")
+    # os.remove("MBTA_GTFS.zip")
 
     return agency, routes, trip, calendar, stop_times, stops
 
