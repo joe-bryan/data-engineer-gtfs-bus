@@ -16,12 +16,12 @@ def schedule_feed(schedule_url: str):
             fd.write(chunk)
 
     with ZipFile("MBTA_GTFS.zip") as myzip:
-        agency = pd.read_csv(myzip.open("agency.txt"))
-        routes = pd.read_csv(myzip.open("routes.txt"))
-        trip = pd.read_csv(myzip.open("trips.txt"))
-        calendar = pd.read_csv(myzip.open("calendar.txt"))
-        stop_times = pd.read_csv(myzip.open("stop_times.txt"))
-        stops = pd.read_csv(myzip.open("stops.txt"))
+        agency = pd.read_csv(myzip.open("agency.txt"), low_memory=False)
+        routes = pd.read_csv(myzip.open("routes.txt"), low_memory=False)
+        trip = pd.read_csv(myzip.open("trips.txt"), low_memory=False)
+        calendar = pd.read_csv(myzip.open("calendar.txt"), low_memory=False)
+        stop_times = pd.read_csv(myzip.open("stop_times.txt"), low_memory=False)
+        stops = pd.read_csv(myzip.open("stops.txt"), low_memory=False)
 
     # os.remove("MBTA_GTFS.zip")
 
@@ -48,8 +48,10 @@ def schedules(
     # agency_name: str = "MBTA",
     # current_schedule_filename: str = "schedule_today",
     # prefect_gcs_block_name: str = "subway-gcs-bucket",
-) -> None:
+):
     schedule_feed(schedule_url)
+
+    os.remove("MBTA_GTFS.zip")
 
     # load_schedules_to_gcs(
     #     wait_for=[trips_today],
@@ -57,8 +59,6 @@ def schedules(
     #     from_path=f"{current_schedule_filename}.parquet.gzip",
     #     to_path=f"current_schedule/{current_schedule_filename}.parquet.gzip",
     # )
-
-    return None
 
 
 if __name__ == "__main__":
