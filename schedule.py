@@ -1,31 +1,30 @@
-import requests
+# import requests
 from zipfile import ZipFile
 import os
 import pandas as pd
 from prefect import flow, task
+import urllib.request
 
 
 @task(persist_result=True)
 def schedule_feed(schedule_url: str):
     """Get newest schedule GTFS file from Massachusets Bay Transportation Authority"""
 
-    r = requests.get(schedule_url)
+    filename = "MBTA_GTFS.zip"
 
-    with open("MBTA_GTFS.zip", "wb") as fd:
-        for chunk in r.iter_content(chunk_size=128):
-            fd.write(chunk)
+    urllib.request.urlretrieve(schedule_url, filename)
 
-    # with ZipFile("MBTA_GTFS.zip") as myzip:
-    #     agency = pd.read_csv(myzip.open("agency.txt"), low_memory=False)
-    #     routes = pd.read_csv(myzip.open("routes.txt"), low_memory=False)
-    #     trip = pd.read_csv(myzip.open("trips.txt"), low_memory=False)
-    #     calendar = pd.read_csv(myzip.open("calendar.txt"), low_memory=False)
-    #     stop_times = pd.read_csv(myzip.open("stop_times.txt"), low_memory=False)
-    #     stops = pd.read_csv(myzip.open("stops.txt"), low_memory=False)
+    with ZipFile(filename) as myzip:
+        agency = pd.read_csv(myzip.open("agency.txt"), low_memory=False)
+        # routes = pd.read_csv(myzip.open("routes.txt"), low_memory=False)
+        # trip = pd.read_csv(myzip.open("trips.txt"), low_memory=False)
+        # calendar = pd.read_csv(myzip.open("calendar.txt"), low_memory=False)
+        # stop_times = pd.read_csv(myzip.open("stop_times.txt"), low_memory=False)
+        # stops = pd.read_csv(myzip.open("stops.txt"), low_memory=False)
 
     # os.remove("MBTA_GTFS.zip")
 
-    return None  # agency, routes, trip, calendar, stop_times, stops
+    return agency  # , routes, trip, calendar, stop_times, stops
 
 
 # @task
