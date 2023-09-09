@@ -28,9 +28,9 @@ def schedule_feed(schedule_url: str):
     return agency, routes, trip, calendar, stops
 
 
-@task
-def stop_times(zip_file: str):
-    with ZipFile(zip_file) as myzip:
+@task(persist_result=True)
+def stop_times(filename: str):
+    with ZipFile(filename) as myzip:
         stop_times = pv.read_csv(myzip.open("stop_times.txt"))
         pq.write_table(stop_times, "stop_times.parquet")
         stop_times = pd.read_parquet("stop_times.parquet")
@@ -55,13 +55,14 @@ def stop_times(zip_file: str):
 @flow
 def schedules(
     schedule_url: str = "https://cdn.mbta.com/MBTA_GTFS.zip",
+    filename: str = "MBTA_GTFS.zip"
     # agency_name: str = "MBTA",
     # current_schedule_filename: str = "schedule_today",
     # prefect_gcs_block_name: str = "subway-gcs-bucket",
 ):
     schedule_feed(schedule_url)
 
-    stop_times("MBTA_GTFS.zip")
+    stop_times(filename)
 
     os.remove("MBTA_GTFS.zip")
 
