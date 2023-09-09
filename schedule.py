@@ -29,9 +29,11 @@ def schedule_feed(schedule_url: str):
 
 
 @task(persist_result=True)
-def stop_times(filename: str):
-    with ZipFile(filename) as myzip:
-        stop_times = pv.read_csv(myzip.open("stop_times.txt"))
+def stop_times():
+    filename = "MBTA_GTFS.zip"
+
+    with ZipFile(filename) as zip:
+        stop_times = pv.read_csv(zip.open("stop_times.txt"))
         pq.write_table(stop_times, "stop_times.parquet")
         stop_times = pd.read_parquet("stop_times.parquet")
 
@@ -55,14 +57,13 @@ def stop_times(filename: str):
 @flow
 def schedules(
     schedule_url: str = "https://cdn.mbta.com/MBTA_GTFS.zip",
-    filename: str = "MBTA_GTFS.zip"
     # agency_name: str = "MBTA",
     # current_schedule_filename: str = "schedule_today",
     # prefect_gcs_block_name: str = "subway-gcs-bucket",
 ):
     schedule_feed(schedule_url)
 
-    stop_times(filename)
+    stop_times()
 
     os.remove("MBTA_GTFS.zip")
 
