@@ -75,11 +75,11 @@ def add_stops_stoptimes_schedule(
 
     trips_routes = trip.merge(routes, how="left", on="route_id")
 
-    # # Replace empty values with NaN
-    # trips_routes["agency_id"].replace("", np.nan, inplace=True)
+    # Replace empty values with NaN
+    trips_routes["agency_id"].replace("", np.nan, inplace=True)
 
-    # # Assert and remove trips that aren't part of the selected agency_name
-    # trips_routes.dropna(subset=["agency_id"], inplace=True)
+    # Assert and remove trips that aren't part of the selected agency_name
+    trips_routes.dropna(subset=["agency_id"], inplace=True)
 
     # # Add calendar data to trips_routes
     # trips_routes_dates = trips_routes.merge(calendar, how="left", on="service_id")
