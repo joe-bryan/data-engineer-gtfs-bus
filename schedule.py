@@ -41,18 +41,18 @@ def stop_times_file(schedule_url: str):
         ).write_parquet(
             "stop_times.parquet.gzip", compression="gzip", row_group_size=100000
         )
-        stop_times = pd.read_parquet(
-            "stop_times.parquet.gzip",
-            columns=[
-                "trip_id",
-                "arrival_time",
-                "departure_time",
-                "stop_id",
-                "stop_sequence",
-            ],
-        )
+        # stop_times = pd.read_parquet(
+        #     "stop_times.parquet.gzip",
+        #     columns=[
+        #         "trip_id",
+        #         "arrival_time",
+        #         "departure_time",
+        #         "stop_id",
+        #         "stop_sequence",
+        #     ],
+        # )
 
-    return stop_times
+    # return stop_times
 
 
 @task(persist_result=True)
@@ -105,6 +105,7 @@ def add_stops_stoptimes_schedule(
     return trips_routes_dates  # trips_routes_dates_stoptimes_stops
 
 
+@task
 def stop_stop_times(trips_routes_dates: pd.DataFrame):
     stop_times_pl = pl.read_parquet(
         "stop_times.parquet.gzip",
@@ -138,131 +139,114 @@ def stop_stop_times(trips_routes_dates: pd.DataFrame):
     return trips_routes_dates_stoptimes
 
 
-# @task
-# def schedule_today(
-#     trips_routes_dates_stoptimes_stops: pd.DataFrame, current_trips_filename: str
-# ) -> pd.DataFrame:
-#     """Transform all trip schedules to include only those running on the current (US/Eastern) day"""
+@task
+def schedule_today(
+    trips_routes_dates_stoptimes: pd.DataFrame, current_trips_filename: str
+) -> pd.DataFrame:
+    """Transform all trip schedules to include only those running on the current (US/Eastern) day"""
 
-#     # Set the timezone as UTC
-#     tz = pytz.timezone("US/Eastern")
+    # Set the timezone as UTC
+    tz = pytz.timezone("US/Eastern")
 
-#     # Get the datetime of today
-#     todays_date = datetime.now(tz)
+    # Get the datetime of today
+    todays_date = datetime.now(tz)
 
-#     # # Get only the day of week of today in lowercase
-#     # current_day = todays_date.strftime("%A").lower()
+    # # Get only the day of week of today in lowercase
+    # current_day = todays_date.strftime("%A").lower()
 
-#     # Get the date in 'YearMonthDay' format
-#     todays_date_string = todays_date.strftime("%Y%m%d")
+    # Get the date in 'YearMonthDay' format
+    todays_date_string = todays_date.strftime("%Y%m%d")
 
-#     # Convert todays_date_string to a Pandas datetime
-#     todays_date_1 = pd.to_datetime(todays_date_string, format="%Y%m%d")
+    # Convert todays_date_string to a Pandas datetime
+    todays_date_1 = pd.to_datetime(todays_date_string, format="%Y%m%d")
 
-#     # Convert start & end dates to datetime
-#     trips_routes_dates_stoptimes_stops[
-#         ["start_date", "end_date"]
-#     ] = trips_routes_dates_stoptimes_stops[["start_date", "end_date"]].apply(
-#         pd.to_datetime, format="%Y%m%d"
-#     )
+    # Convert start & end dates to datetime
+    trips_routes_dates_stoptimes[
+        ["start_date", "end_date"]
+    ] = trips_routes_dates_stoptimes[["start_date", "end_date"]].apply(
+        pd.to_datetime, format="%Y%m%d"
+    )
 
-#     # Use these columns only
-#     columns_only = [
-#         "route_id",
-#         "service_id",
-#         "trip_id",
-#         "trip_headsign",
-#         "direction_id",
-#         "block_id",
-#         "shape_id",
-#         "wheelchair_accessible",
-#         "route_pattern_id",
-#         "bikes_allowed",
-#         "agency_id",
-#         "route_short_name",
-#         "route_long_name",
-#         "route_desc",
-#         "route_type",
-#         "route_url",
-#         "route_color",
-#         "route_text_color",
-#         "route_sort_order",
-#         "route_fare_class",
-#         "line_id",
-#         "network_id",
-#         "monday",
-#         "tuesday",
-#         "wednesday",
-#         "thursday",
-#         "friday",
-#         "saturday",
-#         "sunday",
-#         "start_date",
-#         "end_date",
-#         "arrival_time",
-#         "departure_time",
-#         "stop_id",
-#         "stop_sequence",
-#         "stop_code",
-#         "stop_name",
-#         "stop_desc",
-#         "platform_code",
-#         "platform_name",
-#         "stop_lat",
-#         "stop_lon",
-#         "zone_id",
-#         "stop_url",
-#         "level_id",
-#         "location_type",
-#         "parent_station",
-#         "wheelchair_boarding",
-#         "municipality",
-#         "vehicle_type",
-#     ]
+    # Use these columns only
+    columns_only = [
+        "route_id",
+        "service_id",
+        "trip_id",
+        "trip_headsign",
+        "direction_id",
+        "block_id",
+        "shape_id",
+        "wheelchair_accessible",
+        "route_pattern_id",
+        "bikes_allowed",
+        "agency_id",
+        "route_short_name",
+        "route_long_name",
+        "route_desc",
+        "route_type",
+        "route_url",
+        "route_color",
+        "route_text_color",
+        "route_sort_order",
+        "route_fare_class",
+        "line_id",
+        "network_id",
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday",
+        "sunday",
+        "start_date",
+        "end_date",
+        "arrival_time",
+        "departure_time",
+        "stop_id",
+        "stop_sequence",
+    ]
 
-#     # Only use these columns in the dataset
-#     trips_routes_dates_stoptimes_stops_1 = trips_routes_dates_stoptimes_stops[
-#         columns_only
-#     ]
+    # Only use these columns in the dataset
+    trips_routes_dates_stoptimes_1 = trips_routes_dates_stoptimes[columns_only]
 
-#     # Only use data if current day is in the service interval
-#     trips_today = trips_routes_dates_stoptimes_stops_1[
-#         (todays_date_1 >= trips_routes_dates_stoptimes_stops_1["start_date"])
-#         & (todays_date_1 <= trips_routes_dates_stoptimes_stops_1["end_date"])
-#     ]
+    # Only use data if current day is in the service interval
+    trips_today = trips_routes_dates_stoptimes_1[
+        (todays_date_1 >= trips_routes_dates_stoptimes_1["start_date"])
+        & (todays_date_1 <= trips_routes_dates_stoptimes_1["end_date"])
+    ]
 
-#     # Apply string type to stop_id in order to successfully
-#     # merge with df_3
-#     trips_today["stop_id"] = trips_today["stop_id"].apply(str)
+    # Apply string type to stop_id in order to successfully
+    # merge with df_3
+    trips_today["stop_id"] = trips_today["stop_id"].apply(str)
 
-#     # Save and compress to parquet file type
-#     trips_today.to_parquet(f"{current_trips_filename}.parquet.gzip", compression="gzip")
+    # Save and compress to parquet file type
+    trips_today.to_parquet(f"{current_trips_filename}.parquet.gzip", compression="gzip")
 
-#     return trips_today
+    return trips_today
 
 
-# @task
-# def load_schedules_to_gcs(
-#     prefect_gcs_block_name: str, from_path: str, to_path: str
-# ) -> None:
-#     """Load the trips today schedule to Google Cloud Bucket"""
+@task
+def load_schedules_to_gcs(
+    prefect_gcs_block_name: str, from_path: str, to_path: str
+) -> None:
+    """Load the trips today schedule to Google Cloud Bucket"""
 
-#     gcs_block = GcsBucket.load(prefect_gcs_block_name)
-#     gcs_block.upload_from_path(from_path=from_path, to_path=to_path)
+    gcs_block = GcsBucket.load(prefect_gcs_block_name)
+    gcs_block.upload_from_path(from_path=from_path, to_path=to_path)
 
-#     os.remove(from_path)
+    os.remove(from_path)
 
-#     return None
+    return None
 
 
 @flow
 def schedules(
     schedule_url: str = "https://cdn.mbta.com/MBTA_GTFS.zip",
     agency_name: str = "MBTA",
-    # current_schedule_filename: str = "schedule_today",
-    # prefect_gcs_block_name: str = "subway-gcs-bucket",
+    current_schedule_filename: str = "schedule_today",
+    prefect_gcs_block_name: str = "subway-gcs-bucket",
 ):
-    agency, routes, trip, calendar, stops = schedule_feed(schedule_url)
+    agency, routes, trip, calendar = schedule_feed(schedule_url)
 
     stop_times_file(schedule_url)
 
@@ -276,21 +260,20 @@ def schedules(
         agency_name=agency_name,
     )
 
-    stop_stop_times(trips_routes_dates=trips_routes_dates)
+    trips_stops = stop_stop_times(trips_routes_dates=trips_routes_dates)
 
-    # # trips_today = schedule_today(
-    # schedule_today(
-    #     wait_for=[trips_stops],
-    #     trips_routes_dates_stoptimes_stops=trips_stops,
-    #     current_trips_filename=current_schedule_filename,
-    # )
+    trips_today = schedule_today(
+        wait_for=[trips_stops],
+        trips_routes_dates_stoptimes=trips_stops,
+        current_trips_filename=current_schedule_filename,
+    )
 
-    # load_schedules_to_gcs(
-    #     wait_for=[trips_today],
-    #     prefect_gcs_block_name=prefect_gcs_block_name,
-    #     from_path=f"{current_schedule_filename}.parquet.gzip",
-    #     to_path=f"current_schedule/{current_schedule_filename}.parquet.gzip",
-    # )
+    load_schedules_to_gcs(
+        wait_for=[trips_today],
+        prefect_gcs_block_name=prefect_gcs_block_name,
+        from_path=f"{current_schedule_filename}.parquet.gzip",
+        to_path=f"current_schedule/{current_schedule_filename}.parquet.gzip",
+    )
 
     os.remove("MBTA_GTFS.zip")
 
