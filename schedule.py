@@ -180,8 +180,6 @@ def schedule_today(
         "route_type",
         "route_url",
         "route_color",
-        "route_text_color",
-        "route_sort_order",
         "route_fare_class",
         "line_id",
         "network_id",
