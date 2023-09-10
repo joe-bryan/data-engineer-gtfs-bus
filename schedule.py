@@ -85,18 +85,19 @@ def add_stops_stoptimes_schedule(
     return trips_routes_dates  # trips_routes_dates_stoptimes_stops
 
 
-# def stop_stop_times(trips_routes_dates: pd.DataFrame,
-#                     stop_times,
-#                     stops: pd.DataFrame):
-#     # Add stop times data to trips_routes_dates
-#     trips_routes_dates_stoptimes = trips_routes_dates.merge(
-#         stop_times, how="left", on="trip_id"
-#     )
+def stop_stop_times(trips_routes_dates: pd.DataFrame, stop_times, stops: pd.DataFrame):
+    # Add stop times data to trips_routes_dates
+    trips_routes_dates_stoptimes = trips_routes_dates.merge(
+        stop_times, how="left", on="trip_id"
+    )
 
-#     # Add stops data to trips_routes_dates_stoptimes
-#     trips_routes_dates_stoptimes_stops = trips_routes_dates_stoptimes.merge(
-#         stops, how="left", on="stop_id"
-#     )
+    # Add stops data to trips_routes_dates_stoptimes
+    trips_routes_dates_stoptimes_stops = trips_routes_dates_stoptimes.merge(
+        stops, how="left", on="stop_id"
+    )
+
+    return trips_routes_dates_stoptimes_stops
+
 
 # @task
 # def schedule_today(
@@ -227,13 +228,17 @@ def schedules(
     stop_times = stop_times_file(schedule_url)
 
     # trips_stops =
-    add_stops_stoptimes_schedule(
+    trips_routes_dates = add_stops_stoptimes_schedule(
         # wait_for=[agency, routes, trip, calendar, stops, stop_times],
         agency=agency,
         routes=routes,
         trip=trip,
         calendar=calendar,
         agency_name=agency_name,
+    )
+
+    stop_stop_times(
+        trips_routes_dates=trips_routes_dates, stop_times=stop_times, stops=stops
     )
 
     # # trips_today = schedule_today(
