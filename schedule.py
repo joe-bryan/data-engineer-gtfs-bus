@@ -204,18 +204,18 @@ def schedule_today(
     return trips_today
 
 
-@task
-def load_schedules_to_gcs(
-    prefect_gcs_block_name: str, from_path: str, to_path: str
-) -> None:
-    """Load the trips today schedule to Google Cloud Bucket"""
+# @task
+# def load_schedules_to_gcs(
+#     prefect_gcs_block_name: str, from_path: str, to_path: str
+# ) -> None:
+#     """Load the trips today schedule to Google Cloud Bucket"""
 
-    gcs_block = GcsBucket.load(prefect_gcs_block_name)
-    gcs_block.upload_from_path(from_path=from_path, to_path=to_path)
+#     gcs_block = GcsBucket.load(prefect_gcs_block_name)
+#     gcs_block.upload_from_path(from_path=from_path, to_path=to_path)
 
-    os.remove(from_path)
+#     os.remove(from_path)
 
-    return None
+#     return None
 
 
 @flow
@@ -244,18 +244,19 @@ def schedules(
         agency_name=agency_name,
     )
 
-    trips_today = schedule_today(
+    # trips_today = schedule_today(
+    schedule_today(
         wait_for=[trips_stops],
         trips_routes_dates_stoptimes_stops=trips_stops,
         current_trips_filename=current_schedule_filename,
     )
 
-    load_schedules_to_gcs(
-        wait_for=[trips_today],
-        prefect_gcs_block_name=prefect_gcs_block_name,
-        from_path=f"{current_schedule_filename}.parquet.gzip",
-        to_path=f"current_schedule/{current_schedule_filename}.parquet.gzip",
-    )
+    # load_schedules_to_gcs(
+    #     wait_for=[trips_today],
+    #     prefect_gcs_block_name=prefect_gcs_block_name,
+    #     from_path=f"{current_schedule_filename}.parquet.gzip",
+    #     to_path=f"current_schedule/{current_schedule_filename}.parquet.gzip",
+    # )
 
 
 if __name__ == "__main__":
