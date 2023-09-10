@@ -62,7 +62,7 @@ def add_stops_stoptimes_schedule(
     trip: pd.DataFrame,
     calendar: pd.DataFrame,
     # stops: pd.DataFrame,
-    # stop_times: pd.DataFrame,
+    stop_times: pd.DataFrame,
     agency_name: str,
 ) -> pd.DataFrame:
     """Add stops and stop times to each trip for the selected agency"""
@@ -84,10 +84,10 @@ def add_stops_stoptimes_schedule(
     # # Add calendar data to trips_routes
     trips_routes_dates = trips_routes.merge(calendar, how="left", on="service_id")
 
-    # # Add stop times data to trips_routes_dates
-    # trips_routes_dates_stoptimes = trips_routes_dates.merge(
-    #     stop_times, how="left", on="trip_id"
-    # )
+    # Add stop times data to trips_routes_dates
+    trips_routes_dates_stoptimes = trips_routes_dates.merge(
+        stop_times, how="left", on="trip_id"
+    )
 
     # # Add stops data to trips_routes_dates_stoptimes
     # trips_routes_dates_stoptimes_stops = trips_routes_dates_stoptimes.merge(
@@ -233,7 +233,7 @@ def schedules(
         trip=trip,
         calendar=calendar,
         # stops=stops,
-        # stop_times=stop_times,
+        stop_times=stop_times,
         agency_name=agency_name,
     )
 
