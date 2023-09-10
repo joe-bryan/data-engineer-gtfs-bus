@@ -55,46 +55,46 @@ def stop_times_file(schedule_url):
     return stop_times
 
 
-@task
-def add_stops_stoptimes_schedule(
-    agency: pd.DataFrame,
-    routes: pd.DataFrame,
-    trip: pd.DataFrame,
-    calendar: pd.DataFrame,
-    stop_times: pd.DataFrame,
-    stops: pd.DataFrame,
-    agency_name: str,
-) -> pd.DataFrame:
-    """Add stops and stop times to each trip for the selected agency"""
+# @task
+# def add_stops_stoptimes_schedule(
+#     agency: pd.DataFrame,
+#     routes: pd.DataFrame,
+#     trip: pd.DataFrame,
+#     calendar: pd.DataFrame,
+#     stops: pd.DataFrame,
+#     stop_times: pd.DataFrame,
+#     agency_name: str,
+# ) -> pd.DataFrame:
+#     """Add stops and stop times to each trip for the selected agency"""
 
-    # Set agency id and agency name to MBTA only
-    agency_id = agency["agency_id"][agency["agency_name"] == agency_name].values[0]
+#     # Set agency id and agency name to MBTA only
+#     agency_id = agency["agency_id"][agency["agency_name"] == agency_name].values[0]
 
-    # Find associated routes for MBTA
-    routes = routes[routes.agency_id == agency_id]
+#     # Find associated routes for MBTA
+#     routes = routes[routes.agency_id == agency_id]
 
-    trips_routes = trip.merge(routes, how="left", on="route_id")
+#     trips_routes = trip.merge(routes, how="left", on="route_id")
 
-    # Replace empty values with NaN
-    trips_routes["agency_id"].replace("", np.nan, inplace=True)
+#     # Replace empty values with NaN
+#     trips_routes["agency_id"].replace("", np.nan, inplace=True)
 
-    # Assert and remove trips that aren't part of the selected agency_name
-    trips_routes.dropna(subset=["agency_id"], inplace=True)
+#     # Assert and remove trips that aren't part of the selected agency_name
+#     trips_routes.dropna(subset=["agency_id"], inplace=True)
 
-    # Add calendar data to trips_routes
-    trips_routes_dates = trips_routes.merge(calendar, how="left", on="service_id")
+#     # Add calendar data to trips_routes
+#     trips_routes_dates = trips_routes.merge(calendar, how="left", on="service_id")
 
-    # Add stop times data to trips_routes_dates
-    trips_routes_dates_stoptimes = trips_routes_dates.merge(
-        stop_times, how="left", on="trip_id"
-    )
+#     # Add stop times data to trips_routes_dates
+#     trips_routes_dates_stoptimes = trips_routes_dates.merge(
+#         stop_times, how="left", on="trip_id"
+#     )
 
-    # Add stops data to trips_routes_dates_stoptimes
-    trips_routes_dates_stoptimes_stops = trips_routes_dates_stoptimes.merge(
-        stops, how="left", on="stop_id"
-    )
+#     # Add stops data to trips_routes_dates_stoptimes
+#     trips_routes_dates_stoptimes_stops = trips_routes_dates_stoptimes.merge(
+#         stops, how="left", on="stop_id"
+#     )
 
-    return trips_routes_dates_stoptimes_stops
+#     return trips_routes_dates_stoptimes_stops
 
 
 # @task
@@ -217,29 +217,27 @@ def add_stops_stoptimes_schedule(
 @flow
 def schedules(
     schedule_url: str = "https://cdn.mbta.com/MBTA_GTFS.zip",
-    agency_name: str = "MBTA",
+    # agency_name: str = "MBTA",
     # current_schedule_filename: str = "schedule_today",
     # prefect_gcs_block_name: str = "subway-gcs-bucket",
 ):
-    agency, routes, trip, calendar, stops = schedule_feed(schedule_url)
+    # agency, routes, trip, calendar, stops =
+    schedule_feed(schedule_url)
 
-    stop_times = stop_times_file(schedule_url)
+    # stop_times
+    stop_times_file(schedule_url)
 
-    os.remove("MBTA_GTFS.zip")
-
-    os.remove("stop_times.parquet.gzip")
-
-    # trips_stops =
-    add_stops_stoptimes_schedule(
-        wait_for=[agency, routes, trip, calendar, stops, stop_times],
-        agency=agency,
-        routes=routes,
-        trip=trip,
-        calendar=calendar,
-        stops=stops,
-        stop_times=stop_times,
-        agency_name=agency_name,
-    )
+    # # trips_stops =
+    # add_stops_stoptimes_schedule(
+    #     wait_for=[agency, routes, trip, calendar, stops, stop_times],
+    #     agency=agency,
+    #     routes=routes,
+    #     trip=trip,
+    #     calendar=calendar,
+    #     stops=stops,
+    #     stop_times=stop_times,
+    #     agency_name=agency_name,
+    # )
 
     # # trips_today = schedule_today(
     # schedule_today(
@@ -254,6 +252,10 @@ def schedules(
     #     from_path=f"{current_schedule_filename}.parquet.gzip",
     #     to_path=f"current_schedule/{current_schedule_filename}.parquet.gzip",
     # )
+
+    os.remove("MBTA_GTFS.zip")
+
+    os.remove("stop_times.parquet.gzip")
 
 
 if __name__ == "__main__":
