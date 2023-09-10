@@ -101,19 +101,19 @@ def stop_stop_times(trips_routes_dates: pd.DataFrame, stops: pd.DataFrame):
 
     stops_pl = pl.from_pandas(stops)
 
-    # Add stop times data to trips_routes_dates
-    trips_routes_dates_stoptimes = trips_routes_dates_pl.join(
-        stop_times_pl, left_on="trip_id", right_on="trip_id"
-    )
+    # # Add stop times data to trips_routes_dates
+    # trips_routes_dates_stoptimes = trips_routes_dates_pl.join(
+    #     stop_times_pl, left_on="trip_id", right_on="trip_id"
+    # )
 
-    # Add stops data to trips_routes_dates_stoptimes
-    trips_routes_dates_stoptimes_stops = trips_routes_dates_stoptimes.join(
-        stops_pl, left_on="stop_id", right_on="stop_id"
-    )
+    # # Add stops data to trips_routes_dates_stoptimes
+    # trips_routes_dates_stoptimes_stops = trips_routes_dates_stoptimes.join(
+    #     stops_pl, left_on="stop_id", right_on="stop_id"
+    # )
 
-    trips_routes_dates_stoptimes_stops = trips_routes_dates_stoptimes_stops.to_pandas()
+    # trips_routes_dates_stoptimes_stops = trips_routes_dates_stoptimes_stops.to_pandas()
 
-    return trips_routes_dates_stoptimes_stops
+    # return trips_routes_dates_stoptimes_stops
 
 
 # @task
