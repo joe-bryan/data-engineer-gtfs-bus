@@ -102,7 +102,7 @@ def add_stops_stoptimes_schedule(
     # # Add calendar data to trips_routes
     trips_routes_dates = trips_routes.merge(calendar, how="left", on="service_id")
 
-    return trips_routes_dates  # trips_routes_dates_stoptimes_stops
+    return trips_routes_dates
 
 
 @task
@@ -128,11 +128,6 @@ def stop_stop_times(trips_routes_dates: pd.DataFrame):
     trips_routes_dates_stoptimes = trips_routes_dates_pl.join(
         stop_times_pl, left_on="trip_id", right_on="trip_id"
     )
-
-    # # Add stops data to trips_routes_dates_stoptimes
-    # trips_routes_dates_stoptimes_stops = stops_pl.join(
-    #     trips_routes_dates_stoptimes, left_on="stop_id", right_on="stop_id"
-    # )
 
     trips_routes_dates_stoptimes = trips_routes_dates_stoptimes.to_pandas()
 
