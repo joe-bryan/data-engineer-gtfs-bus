@@ -23,9 +23,8 @@ def schedule_feed(schedule_url: str):
         routes = pd.read_csv(myzip.open("routes.txt"), low_memory=False)
         trip = pd.read_csv(myzip.open("trips.txt"), low_memory=False)
         calendar = pd.read_csv(myzip.open("calendar.txt"), low_memory=False)
-        stops = pd.read_csv(myzip.open("stops.txt"), low_memory=False)
 
-    return agency, routes, trip, calendar, stops
+    return agency, routes, trip, calendar
 
 
 @task(persist_result=True)
