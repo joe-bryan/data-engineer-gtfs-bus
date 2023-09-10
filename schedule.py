@@ -85,6 +85,12 @@ def add_stops_stoptimes_schedule(
 
     routes = routes[routes["route_id"].isin(subway_only)]
 
+    routes.drop(
+        ["route_text_color", "route_sort_order", "listed_route"], axis=1, inplace=True
+    )
+
+    trip.drop(["trip_short_name"], axis=1, inplace=True)
+
     trips_routes = trip.merge(routes, how="left", on="route_id")
 
     # Replace empty values with NaN
@@ -111,6 +117,8 @@ def stop_stop_times(trips_routes_dates: pd.DataFrame, stops: pd.DataFrame):
         ],
     )
 
+    stops.drop(["on_street", "at_street", "stop_address"], axis=1, inplace=True)
+
     trips_routes_dates_pl = pl.from_pandas(trips_routes_dates)
 
     stops_pl = pl.from_pandas(stops)
@@ -120,14 +128,14 @@ def stop_stop_times(trips_routes_dates: pd.DataFrame, stops: pd.DataFrame):
         stop_times_pl, left_on="trip_id", right_on="trip_id"
     )
 
-    # # Add stops data to trips_routes_dates_stoptimes
-    # trips_routes_dates_stoptimes_stops = trips_routes_dates_stoptimes.join(
-    #     stops_pl, left_on="stop_id", right_on="stop_id"
-    # )
+    # Add stops data to trips_routes_dates_stoptimes
+    trips_routes_dates_stoptimes_stops = trips_routes_dates_stoptimes.join(
+        stops_pl, left_on="stop_id", right_on="stop_id"
+    )
 
-    trips_routes_dates_stoptimes = trips_routes_dates_stoptimes.to_pandas()
+    trips_routes_dates_stoptimes_stops = trips_routes_dates_stoptimes.to_pandas()
 
-    return trips_routes_dates_stoptimes
+    return trips_routes_dates_stoptimes_stops
 
 
 # @task
