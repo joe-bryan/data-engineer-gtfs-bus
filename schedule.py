@@ -29,7 +29,7 @@ def schedule_feed(schedule_url: str):
 
 
 @task(persist_result=True)
-def stop_times_file(schedule_url):
+def stop_times_file(schedule_url: str):
     filename = "MBTA_GTFS.zip"
 
     urllib.request.urlretrieve(schedule_url, filename)
@@ -85,16 +85,33 @@ def add_stops_stoptimes_schedule(
     return trips_routes_dates  # trips_routes_dates_stoptimes_stops
 
 
-def stop_stop_times(trips_routes_dates: pd.DataFrame, stop_times, stops: pd.DataFrame):
+def stop_stop_times(trips_routes_dates: pd.DataFrame, stops: pd.DataFrame):
+    stop_times_pl = pl.read_parquet(
+        "stop_times.parquet.gzip",
+        columns=[
+            "trip_id",
+            "arrival_time",
+            "departure_time",
+            "stop_id",
+            "stop_sequence",
+        ],
+    )
+
+    trips_routes_dates_pl = pl.from_pandas(trips_routes_dates)
+
+    stops_pl = pl.from_pandas(stops)
+
     # Add stop times data to trips_routes_dates
-    trips_routes_dates_stoptimes = trips_routes_dates.merge(
-        stop_times, how="left", on="trip_id"
+    trips_routes_dates_stoptimes = trips_routes_dates_pl.join(
+        stop_times_pl, left_on="trip_id", right_on="trip_id"
     )
 
     # Add stops data to trips_routes_dates_stoptimes
-    trips_routes_dates_stoptimes_stops = trips_routes_dates_stoptimes.merge(
-        stops, how="left", on="stop_id"
+    trips_routes_dates_stoptimes_stops = trips_routes_dates_stoptimes.join(
+        stops_pl, left_on="stop_id", right_on="stop_id"
     )
+
+    trips_routes_dates_stoptimes_stops = trips_routes_dates_stoptimes_stops.to_pandas()
 
     return trips_routes_dates_stoptimes_stops
 
@@ -225,7 +242,7 @@ def schedules(
 ):
     agency, routes, trip, calendar, stops = schedule_feed(schedule_url)
 
-    stop_times = stop_times_file(schedule_url)
+    stop_times_file(schedule_url)
 
     # trips_stops =
     trips_routes_dates = add_stops_stoptimes_schedule(
@@ -237,9 +254,7 @@ def schedules(
         agency_name=agency_name,
     )
 
-    stop_stop_times(
-        trips_routes_dates=trips_routes_dates, stop_times=stop_times, stops=stops
-    )
+    stop_stop_times(trips_routes_dates, stops)
 
     # # trips_today = schedule_today(
     # schedule_today(
