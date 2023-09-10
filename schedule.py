@@ -229,11 +229,11 @@ def schedules(
     add_stops_stoptimes_schedule(
         # wait_for=[agency, routes, trip, calendar, stops, stop_times],
         agency=agency,
-        routes=routes,
-        trip=trip,
-        calendar=calendar,
-        stops=stops,
-        stop_times=stop_times,
+        # routes=routes,
+        # trip=trip,
+        # calendar=calendar,
+        # stops=stops,
+        # stop_times=stop_times,
         agency_name=agency_name,
     )
 
