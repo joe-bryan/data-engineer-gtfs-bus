@@ -276,7 +276,7 @@ def schedules(
         agency_name=agency_name,
     )
 
-    stop_stop_times(trips_routes_dates=trips_routes_dates, stops=stops)
+    stop_stop_times(trips_routes_dates=trips_routes_dates)
 
     # # trips_today = schedule_today(
     # schedule_today(
