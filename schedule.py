@@ -58,7 +58,7 @@ def stop_times_file(schedule_url):
 @task(persist_result=True)
 def add_stops_stoptimes_schedule(
     agency: pd.DataFrame,
-    # routes: pd.DataFrame,
+    routes: pd.DataFrame,
     # trip: pd.DataFrame,
     # calendar: pd.DataFrame,
     # stops: pd.DataFrame,
@@ -70,8 +70,8 @@ def add_stops_stoptimes_schedule(
     # Set agency id and agency name to MBTA only
     agency_id = agency["agency_id"][agency["agency_name"] == agency_name].values[0]
 
-    # # Find associated routes for MBTA
-    # routes = routes[routes.agency_id == agency_id]
+    # Find associated routes for MBTA
+    routes = routes[routes.agency_id == agency_id]
 
     # trips_routes = trip.merge(routes, how="left", on="route_id")
 
@@ -229,7 +229,7 @@ def schedules(
     add_stops_stoptimes_schedule(
         # wait_for=[agency, routes, trip, calendar, stops, stop_times],
         agency=agency,
-        # routes=routes,
+        routes=routes,
         # trip=trip,
         # calendar=calendar,
         # stops=stops,
