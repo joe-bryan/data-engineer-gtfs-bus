@@ -105,7 +105,7 @@ def add_stops_stoptimes_schedule(
     return trips_routes_dates  # trips_routes_dates_stoptimes_stops
 
 
-def stop_stop_times(trips_routes_dates: pd.DataFrame, stops: pd.DataFrame):
+def stop_stop_times(trips_routes_dates: pd.DataFrame):
     stop_times_pl = pl.read_parquet(
         "stop_times.parquet.gzip",
         columns=[
@@ -117,25 +117,25 @@ def stop_stop_times(trips_routes_dates: pd.DataFrame, stops: pd.DataFrame):
         ],
     )
 
-    stops.drop(["on_street", "at_street", "stop_address"], axis=1, inplace=True)
+    # stops.drop(["on_street", "at_street", "stop_address"], axis=1, inplace=True)
 
     trips_routes_dates_pl = pl.from_pandas(trips_routes_dates)
 
-    stops_pl = pl.from_pandas(stops)
+    # stops_pl = pl.from_pandas(stops)
 
     # Add stop times data to trips_routes_dates
     trips_routes_dates_stoptimes = trips_routes_dates_pl.join(
         stop_times_pl, left_on="trip_id", right_on="trip_id"
     )
 
-    # Add stops data to trips_routes_dates_stoptimes
-    trips_routes_dates_stoptimes_stops = stops_pl.join(
-        trips_routes_dates_stoptimes, left_on="stop_id", right_on="stop_id"
-    )
+    # # Add stops data to trips_routes_dates_stoptimes
+    # trips_routes_dates_stoptimes_stops = stops_pl.join(
+    #     trips_routes_dates_stoptimes, left_on="stop_id", right_on="stop_id"
+    # )
 
-    # trips_routes_dates_stoptimes = trips_routes_dates_stoptimes.to_pandas()
+    trips_routes_dates_stoptimes = trips_routes_dates_stoptimes.to_pandas()
 
-    return trips_routes_dates_stoptimes_stops
+    return trips_routes_dates_stoptimes
 
 
 # @task
