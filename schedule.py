@@ -71,6 +71,20 @@ def add_stops_stoptimes_schedule(
     # Find associated routes for MBTA
     routes = routes[routes.agency_id == agency_id]
 
+    # These are route id's for subway lines
+    subway_only = [
+        "Blue",
+        "Green-B",
+        "Green-C",
+        "Green-D",
+        "Green-E",
+        "Mattapan",
+        "Orange",
+        "Red",
+    ]
+
+    routes = routes[routes["route_id"].isin(subway_only)]
+
     trips_routes = trip.merge(routes, how="left", on="route_id")
 
     # Replace empty values with NaN
@@ -101,19 +115,19 @@ def stop_stop_times(trips_routes_dates: pd.DataFrame, stops: pd.DataFrame):
 
     stops_pl = pl.from_pandas(stops)
 
-    # # Add stop times data to trips_routes_dates
-    # trips_routes_dates_stoptimes = trips_routes_dates_pl.join(
-    #     stop_times_pl, left_on="trip_id", right_on="trip_id"
-    # )
+    # Add stop times data to trips_routes_dates
+    trips_routes_dates_stoptimes = trips_routes_dates_pl.join(
+        stop_times_pl, left_on="trip_id", right_on="trip_id"
+    )
 
-    # # Add stops data to trips_routes_dates_stoptimes
-    # trips_routes_dates_stoptimes_stops = trips_routes_dates_stoptimes.join(
-    #     stops_pl, left_on="stop_id", right_on="stop_id"
-    # )
+    # Add stops data to trips_routes_dates_stoptimes
+    trips_routes_dates_stoptimes_stops = trips_routes_dates_stoptimes.join(
+        stops_pl, left_on="stop_id", right_on="stop_id"
+    )
 
-    # trips_routes_dates_stoptimes_stops = trips_routes_dates_stoptimes_stops.to_pandas()
+    trips_routes_dates_stoptimes_stops = trips_routes_dates_stoptimes_stops.to_pandas()
 
-    # return trips_routes_dates_stoptimes_stops
+    return trips_routes_dates_stoptimes_stops
 
 
 # @task
