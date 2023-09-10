@@ -3,7 +3,7 @@
 ###
 name: schedules
 description: null
-version: c85b1cb996a43015bb74811c200d654f
+version: 99711ec0ee08721ca52dbc9f238e953e
 # The work queue that will handle this deployment's runs
 work_queue_name: default
 work_pool_name: subway
@@ -47,8 +47,8 @@ infrastructure:
     _is_anonymous: false
     block_type_slug: gcp-credentials
   cpu: null
-  memory: null
-  memory_unit: null
+  memory: 1
+  memory_unit: Gi
   vpc_connector_name: null
   args: null
   keep_job: false
@@ -81,5 +81,5 @@ parameter_openapi_schema:
       type: string
   required: null
   definitions: null
-timestamp: '2023-09-09T17:19:29.550496+00:00'
+timestamp: '2023-09-09T23:41:25.474995+00:00'
 triggers: []
