@@ -125,7 +125,7 @@ def stop_stop_times(trips_routes_dates: pd.DataFrame, stops: pd.DataFrame):
     #     stops_pl, left_on="stop_id", right_on="stop_id"
     # )
 
-    # trips_routes_dates_stoptimes_stops = trips_routes_dates_stoptimes_stops.to_pandas()
+    trips_routes_dates_stoptimes = trips_routes_dates_stoptimes.to_pandas()
 
     return trips_routes_dates_stoptimes
 
