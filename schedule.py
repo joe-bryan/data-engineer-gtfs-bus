@@ -40,18 +40,6 @@ def stop_times_file(schedule_url: str):
         ).write_parquet(
             "stop_times.parquet.gzip", compression="gzip", row_group_size=100000
         )
-        # stop_times = pd.read_parquet(
-        #     "stop_times.parquet.gzip",
-        #     columns=[
-        #         "trip_id",
-        #         "arrival_time",
-        #         "departure_time",
-        #         "stop_id",
-        #         "stop_sequence",
-        #     ],
-        # )
-
-    # return stop_times
 
 
 @task(persist_result=True)
@@ -117,11 +105,7 @@ def stop_stop_times(trips_routes_dates: pd.DataFrame):
         ],
     )
 
-    # stops.drop(["on_street", "at_street", "stop_address"], axis=1, inplace=True)
-
     trips_routes_dates_pl = pl.from_pandas(trips_routes_dates)
-
-    # stops_pl = pl.from_pandas(stops)
 
     # Add stop times data to trips_routes_dates
     trips_routes_dates_stoptimes = trips_routes_dates_pl.join(
@@ -144,9 +128,6 @@ def schedule_today(
 
     # Get the datetime of today
     todays_date = datetime.now(tz)
-
-    # # Get only the day of week of today in lowercase
-    # current_day = todays_date.strftime("%A").lower()
 
     # Get the date in 'YearMonthDay' format
     todays_date_string = todays_date.strftime("%Y%m%d")
@@ -244,7 +225,6 @@ def schedules(
 
     # trips_stops =
     trips_routes_dates = add_stops_stoptimes_schedule(
-        # wait_for=[agency, routes, trip, calendar, stops, stop_times],
         agency=agency,
         routes=routes,
         trip=trip,
