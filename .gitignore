@@ -193,3 +193,7 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
+# Streamlit
+/streamlit/.streamlit/
+/secrets.toml

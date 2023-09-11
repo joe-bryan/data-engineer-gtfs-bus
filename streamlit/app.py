@@ -1,5 +1,6 @@
 import streamlit as st
 from google.cloud import storage
+from google.oauth2 import service_account
 import folium
 from streamlit_folium import st_folium
 from datetime import datetime
@@ -14,7 +15,12 @@ def refresh_map():
     eastern_tz = pytz.timezone("US/Eastern")
     now = datetime.now(eastern_tz).strftime("%Y-%m-%d %H:%M:%S")
 
-    client = storage.Client()
+    # Create API client for gcs bucket
+    credentials = service_account.Credentials.from_service_account_info(
+        st.secrets.connections_gcs
+    )
+
+    client = storage.Client(credentials=credentials)
 
     def read_csvfile(bucket_name: str, file_path: str):
         """Retrieve GCS bucket content"""
@@ -87,7 +93,7 @@ def refresh_map():
         print(error)
         # number_of_late_subways = 0
 
-    st.title("MBTA Delayed Subways")
+    st.title("🚇MBTA Delayed Subways")
     # st.subheader(
     #     f"Number of subways currently late: {number_of_late_subways}",
     # )
