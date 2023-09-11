@@ -139,6 +139,10 @@ def stop_stop_times(trips_routes_dates: pd.DataFrame):
         "stop_times.parquet.gzip",
     )
 
+    stops_pl = pl.read_parquet("stops.parquet.gzip").filter(
+        pl.col("zone_id") == "RapidTransit"
+    )
+
     trips_routes_dates_pl = pl.from_pandas(trips_routes_dates)
 
     # Add stop times data to trips_routes_dates
