@@ -56,7 +56,7 @@ def create_biqquery_table():
         SchemaField("current_stop", field_type="STRING", mode="NULLABLE"),
         SchemaField("current_status", field_type="STRING", mode="NULLABLE"),
         SchemaField("timestamp", field_type="STRING", mode="REQUIRED"),
-        SchemaField("live_stop_id", field_type="STRING", mode="REQUIRED"),
+        SchemaField("live_stop_id", field_type="STRING", mode="NULLABLE"),
         SchemaField("vehicle", field_type="STRING", mode="NULLABLE"),
         SchemaField("label", field_type="STRING", mode="NULLABLE"),
         SchemaField("arrival_time_fixed", field_type="STRING", mode="REQUIRED"),
