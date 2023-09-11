@@ -217,6 +217,11 @@ def schedule_today(
         "departure_time",
         "stop_id",
         "stop_sequence",
+        "stop_name",
+        "stop_desc",
+        "stop_lat",
+        "stop_lon",
+        "zone_id",
     ]
 
     # Only use these columns in the dataset
