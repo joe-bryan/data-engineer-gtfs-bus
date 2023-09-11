@@ -118,12 +118,6 @@ def add_stops_stoptimes_schedule(
 
     routes = routes[routes["route_id"].isin(subway_only)]
 
-    routes.drop(
-        ["route_text_color", "route_sort_order", "listed_route"], axis=1, inplace=True
-    )
-
-    trip.drop(["trip_short_name"], axis=1, inplace=True)
-
     trips_routes = trip.merge(routes, how="left", on="route_id")
 
     # Replace empty values with NaN
