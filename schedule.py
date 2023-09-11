@@ -20,8 +20,36 @@ def schedule_feed(schedule_url: str):
 
     with ZipFile(filename) as myzip:
         agency = pd.read_csv(myzip.open("agency.txt"), low_memory=False)
-        routes = pd.read_csv(myzip.open("routes.txt"), low_memory=False)
-        trip = pd.read_csv(myzip.open("trips.txt"), low_memory=False)
+        routes = pd.read_csv(
+            myzip.open("routes.txt"),
+            low_memory=False,
+            usecols=[
+                "route_id",
+                "agency_id",
+                "route_short_name",
+                "route_long_name",
+                "route_desc",
+                "route_type",
+                "route_url",
+                "route_fare_class",
+                "line_id",
+                "network_id",
+            ],
+        )
+        trip = pd.read_csv(
+            myzip.open("trips.txt"),
+            low_memory=False,
+            usecols=[
+                "route_id",
+                "service_id",
+                "trip_id",
+                "trip_headsign",
+                "direction_id",
+                "wheelchair_accessible",
+                "route_pattern_id",
+                "bikes_allowed",
+            ],
+        )
         calendar = pd.read_csv(myzip.open("calendar.txt"), low_memory=False)
 
     return agency, routes, trip, calendar
@@ -37,9 +65,27 @@ def stop_times_file(schedule_url: str):
         pl.read_csv(
             myzip.open("stop_times.txt"),
             dtypes={"trip_id": str, "stop_id": str, "stop_headsign": str},
+            columns=[
+                "trip_id",
+                "arrival_time",
+                "departure_time",
+                "stop_id",
+                "stop_sequence",
+            ],
         ).write_parquet(
             "stop_times.parquet.gzip", compression="gzip", row_group_size=100000
         )
+        pl.read_csv(
+            myzip.open("stops.txt"),
+            columns=[
+                "stop_id",
+                "stop_name",
+                "stop_desc",
+                "stop_lat",
+                "stop_lon",
+                "zone_id",
+            ],
+        ).write_parquet("stops.parquet.gzip", compression="gzip", row_group_size=1000)
 
 
 @task(persist_result=True)
@@ -96,13 +142,6 @@ def add_stops_stoptimes_schedule(
 def stop_stop_times(trips_routes_dates: pd.DataFrame):
     stop_times_pl = pl.read_parquet(
         "stop_times.parquet.gzip",
-        columns=[
-            "trip_id",
-            "arrival_time",
-            "departure_time",
-            "stop_id",
-            "stop_sequence",
-        ],
     )
 
     trips_routes_dates_pl = pl.from_pandas(trips_routes_dates)
@@ -149,8 +188,6 @@ def schedule_today(
         "trip_id",
         "trip_headsign",
         "direction_id",
-        "block_id",
-        "shape_id",
         "wheelchair_accessible",
         "route_pattern_id",
         "bikes_allowed",
@@ -160,7 +197,6 @@ def schedule_today(
         "route_desc",
         "route_type",
         "route_url",
-        "route_color",
         "route_fare_class",
         "line_id",
         "network_id",
@@ -223,7 +259,6 @@ def schedules(
 
     stop_times_file(schedule_url)
 
-    # trips_stops =
     trips_routes_dates = add_stops_stoptimes_schedule(
         agency=agency,
         routes=routes,
@@ -250,6 +285,8 @@ def schedules(
     os.remove("MBTA_GTFS.zip")
 
     os.remove("stop_times.parquet.gzip")
+
+    os.remove("stops.txt")
 
 
 if __name__ == "__main__":
