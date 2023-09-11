@@ -52,8 +52,8 @@ def combine_live_trips_with_schedule(
 
     compare = trips_today.merge(
         live_locations,
-        left_on=["trip_id", "stop_id", "direction_id", "route_id"],
-        right_on=["trip_id", "stop_id", "direction_id", "live_route_id"],
+        left_on=["trip_id", "direction_id", "route_id"],
+        right_on=["trip_id", "direction_id", "live_route_id"],
     )
 
     return compare
