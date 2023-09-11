@@ -281,7 +281,7 @@ def schedules(
 
     os.remove("stop_times.parquet.gzip")
 
-    os.remove("stops.txt")
+    os.remove("stops.parquet.gzip")
 
 
 if __name__ == "__main__":
