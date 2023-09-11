@@ -1,6 +1,7 @@
 from subway_locations import flow_live_locations_subway
 from subway_locations_schedules import subway_times
 from write_bigquery_table import write_subways_to_bigquery
+from late_subway_gold import gold_flow
 from prefect import flow
 
 
@@ -16,6 +17,9 @@ def main_flow():
 
     # Write any late subways to bigquery table
     write_subways_to_bigquery(wait_for=late)
+
+    # Create gold table for data visualization
+    gold_flow(wait_for=write_subways_to_bigquery)
 
 
 if __name__ == "__main__":
