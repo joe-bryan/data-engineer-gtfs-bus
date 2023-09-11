@@ -77,6 +77,7 @@ def stop_times_file(schedule_url: str):
         )
         pl.read_csv(
             myzip.open("stops.txt"),
+            dtypes={"stop_id": str, "stop_name": str, "stop_desc": str, "zone_id": str},
             columns=[
                 "stop_id",
                 "stop_name",
