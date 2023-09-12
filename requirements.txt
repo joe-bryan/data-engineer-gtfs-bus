@@ -8,8 +8,8 @@ aiosqlite==0.19.0
     # via prefect
 alembic==1.11.3
     # via prefect
-ansi2html==1.8.0
-    # via dash
+altair==5.1.1
+    # via streamlit
 anyio==3.7.1
     # via
     #   httpcore
@@ -27,10 +27,18 @@ attrs==23.1.0
     #   referencing
 black==23.7.0
     # via -r ./requirements.in
+blinker==1.6.2
+    # via streamlit
+branca==0.6.0
+    # via
+    #   folium
+    #   streamlit-folium
 build==0.10.0
     # via pip-tools
 cachetools==5.3.1
-    # via google-auth
+    # via
+    #   google-auth
+    #   streamlit
 certifi==2023.7.22
     # via
     #   apprise
@@ -48,9 +56,9 @@ click==8.1.6
     # via
     #   apprise
     #   black
-    #   flask
     #   pip-tools
     #   prefect
+    #   streamlit
     #   typer
     #   uvicorn
 cloudpickle==2.2.1
@@ -66,22 +74,6 @@ croniter==1.4.1
     # via prefect
 cryptography==41.0.3
     # via prefect
-dash==2.12.1
-    # via
-    #   -r ./requirements.in
-    #   dash-bootstrap-components
-dash-bootstrap-components==1.4.2
-    # via -r ./requirements.in
-dash-core-components==2.0.0
-    # via
-    #   -r ./requirements.in
-    #   dash
-dash-html-components==2.0.0
-    # via
-    #   -r ./requirements.in
-    #   dash
-dash-table==5.0.0
-    # via dash
 dateparser==1.1.8
     # via prefect
 distlib==0.3.7
@@ -96,10 +88,16 @@ filelock==3.12.2
     # via virtualenv
 flake8==6.0.0
     # via -r ./requirements.in
-flask==2.2.5
-    # via dash
+folium==0.14.0
+    # via
+    #   -r ./requirements.in
+    #   streamlit-folium
 fsspec==2023.6.0
     # via prefect
+gitdb==4.0.10
+    # via gitpython
+gitpython==3.1.35
+    # via streamlit
 google-api-core[grpc]==2.11.1
     # via
     #   -r ./requirements.in
@@ -191,21 +189,25 @@ idna==3.4
     #   requests
 importlib-metadata==6.8.0
     # via
-    #   flask
     #   markdown
     #   prefect
-itsdangerous==2.1.2
-    # via flask
+    #   streamlit
 jinja2==3.1.2
     # via
-    #   flask
+    #   altair
+    #   branca
+    #   folium
     #   prefect
+    #   pydeck
+    #   streamlit-folium
 jsonpatch==1.33
     # via prefect
 jsonpointer==2.4
     # via jsonpatch
 jsonschema==4.19.0
-    # via prefect
+    # via
+    #   altair
+    #   prefect
 jsonschema-specifications==2023.7.1
     # via jsonschema
 kubernetes==27.2.0
@@ -220,21 +222,22 @@ markupsafe==2.1.3
     # via
     #   jinja2
     #   mako
-    #   werkzeug
 mccabe==0.7.0
     # via flake8
 mdurl==0.1.2
     # via markdown-it-py
 mypy-extensions==1.0.0
     # via black
-nest-asyncio==1.5.7
-    # via dash
 nodeenv==1.8.0
     # via pre-commit
 numpy==1.25.2
     # via
+    #   altair
+    #   folium
     #   pandas
     #   pyarrow
+    #   pydeck
+    #   streamlit
 oauthlib==3.2.2
     # via
     #   kubernetes
@@ -243,30 +246,32 @@ orjson==3.9.5
     # via prefect
 packaging==23.1
     # via
+    #   altair
     #   black
     #   build
     #   docker
     #   google-cloud-bigquery
-    #   plotly
     #   prefect
+    #   streamlit
 pandas==1.5.3
-    # via -r ./requirements.in
+    # via
+    #   -r ./requirements.in
+    #   altair
+    #   streamlit
 pathspec==0.11.2
     # via
     #   black
     #   prefect
 pendulum==2.1.2
     # via prefect
+pillow==9.5.0
+    # via streamlit
 pip-tools==7.3.0
     # via -r ./requirements.in
 platformdirs==3.10.0
     # via
     #   black
     #   virtualenv
-plotly==5.16.1
-    # via
-    #   -r ./requirements.in
-    #   dash
 polars==0.19.2
     # via -r ./requirements.in
 pre-commit==3.3.3
@@ -287,8 +292,11 @@ protobuf==4.24.0
     #   grpcio-status
     #   gtfs-realtime-bindings
     #   proto-plus
+    #   streamlit
 pyarrow==13.0.0
-    # via -r ./requirements.in
+    # via
+    #   -r ./requirements.in
+    #   streamlit
 pyasn1==0.5.0
     # via
     #   pyasn1-modules
@@ -303,10 +311,14 @@ pydantic==1.10.12
     # via
     #   fastapi
     #   prefect
+pydeck==0.8.0
+    # via streamlit
 pyflakes==3.0.1
     # via flake8
 pygments==2.16.1
     # via rich
+pympler==1.0.1
+    # via streamlit
 pyparsing==3.1.1
     # via httplib2
 pyproject-hooks==1.0.0
@@ -319,14 +331,17 @@ python-dateutil==2.8.2
     #   kubernetes
     #   pandas
     #   pendulum
+    #   streamlit
 python-slugify==8.0.1
     # via prefect
-pytz==2023.3
+pytz==2022.7
     # via
     #   -r ./requirements.in
     #   dateparser
     #   pandas
     #   prefect
+pytz-deprecation-shim==0.1.0.post0
+    # via tzlocal
 pytzdata==2020.1
     # via pendulum
 pyyaml==6.0.1
@@ -347,21 +362,22 @@ requests==2.31.0
     # via
     #   -r ./requirements.in
     #   apprise
-    #   dash
     #   docker
+    #   folium
     #   google-api-core
     #   google-cloud-bigquery
     #   google-cloud-storage
     #   kubernetes
     #   requests-oauthlib
+    #   streamlit
 requests-oauthlib==1.3.1
     # via
     #   apprise
     #   kubernetes
-retrying==1.3.4
-    # via dash
 rich==13.5.2
-    # via prefect
+    # via
+    #   prefect
+    #   streamlit
 rpds-py==0.9.2
     # via
     #   jsonschema
@@ -378,7 +394,8 @@ six==1.16.0
     #   google-auth-httplib2
     #   kubernetes
     #   python-dateutil
-    #   retrying
+smmap==5.0.0
+    # via gitdb
 sniffio==1.3.0
     # via
     #   anyio
@@ -391,38 +408,55 @@ sqlalchemy[asyncio]==2.0.20
     #   prefect
 starlette==0.27.0
     # via fastapi
+streamlit==1.26.0
+    # via
+    #   -r ./requirements.in
+    #   streamlit-folium
+streamlit-folium==0.13.0
+    # via -r ./requirements.in
 tenacity==8.2.3
     # via
-    #   plotly
     #   prefect-gcp
+    #   streamlit
 text-unidecode==1.3
     # via python-slugify
 toml==0.10.2
-    # via prefect
+    # via
+    #   prefect
+    #   streamlit
 tomli==2.0.1
     # via
     #   black
     #   build
     #   pip-tools
     #   pyproject-hooks
+toolz==0.12.0
+    # via altair
+tornado==6.3.3
+    # via streamlit
 typer==0.9.0
     # via prefect
 typing-extensions==4.7.1
     # via
     #   alembic
+    #   altair
     #   black
-    #   dash
     #   fastapi
     #   prefect
     #   pydantic
     #   sqlalchemy
     #   starlette
+    #   streamlit
     #   typer
     #   uvicorn
 tzdata==2023.3
-    # via tzlocal
-tzlocal==5.0.1
-    # via dateparser
+    # via
+    #   pytz-deprecation-shim
+    #   tzlocal
+tzlocal==4.3.1
+    # via
+    #   dateparser
+    #   streamlit
 uritemplate==4.1.1
     # via google-api-python-client
 urllib3==1.26.16
@@ -433,18 +467,18 @@ urllib3==1.26.16
     #   requests
 uvicorn==0.23.2
     # via prefect
+validators==0.22.0
+    # via streamlit
 virtualenv==20.24.2
     # via pre-commit
+watchdog==3.0.0
+    # via streamlit
 websocket-client==1.6.2
     # via
     #   docker
     #   kubernetes
 websockets==11.0.3
     # via prefect
-werkzeug==2.2.3
-    # via
-    #   dash
-    #   flask
 wheel==0.41.2
     # via pip-tools
 zipp==3.16.2
